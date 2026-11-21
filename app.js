@@ -53,6 +53,11 @@ function switchTab(tabId) {
   activeBtn.classList.remove('text-slate-700');
 }
 
+function goToTab(tabId) {
+  switchTab(tabId);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 // ==================== 3. CHECKLIST KEAMANAN DATA ====================
 function updateSecurityStatus() {
   const allChecked = Array.from(document.querySelectorAll('.sec-check')).every(c => c.checked);

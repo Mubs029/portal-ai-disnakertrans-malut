@@ -37,3 +37,8 @@ body {
     display: none !important;
   }
 }
+/* Memperbesar teks pada seluruh kotak Perintah AI (Prompt) agar nyaman dibaca ASN */
+pre {
+  font-size: 0.875rem !important; /* 14px (setara text-sm) */
+  line-height: 1.65 !important;
+}
