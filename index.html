@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Panduan AI Sesi 2 – Disnakertrans Provinsi Maluku Utara 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+          colors: {
+            navy: {
+              50: '#f0f4f8', 100: '#d9e2ec', 200: '#bcccdc',
+              600: '#243b53', 700: '#102a43', 800: '#0b2239', 900: '#071728'
+            },
+            gold: { 400: '#eab308', 500: '#ca8a04', 600: '#a16207' }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+  <!-- HEADER INSTANSI DENGAN LOGO PROVINSI MALUKU UTARA -->
+  <header class="bg-navy-900 text-white border-b-4 border-gold-400 shadow-md no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white/95 p-1.5 flex items-center justify-center shrink-0 shadow-md border-2 border-gold-400">
+            <img src="assets/logo-malut.png" alt="Logo Provinsi Maluku Utara" class="w-full h-full object-contain" />
+          </div>
+          <div>
+            <p class="text-xs font-semibold tracking-wider uppercase text-gold-400">
+              Dinas Tenaga Kerja dan Transmigrasi Provinsi Maluku Utara • Tahun 2026
+            </p>
+            <h1 class="text-lg sm:text-2xl font-extrabold leading-tight mt-0.5">
+              Portal Panduan &amp; Praktik Pelatihan Pemanfaatan AI (Sesi 2)
+            </h1>
+            <p class="text-xs sm:text-sm text-navy-100 mt-1">
+              Topik: <span class="font-semibold text-white">AI untuk Layanan Ketenagakerjaan dan Transmigrasi: Penerapan pada Tugas Bidang dan Analisis Data</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- INDIKATOR PROGRES -->
+        <div class="flex flex-col sm:items-end gap-1.5 bg-navy-800/80 px-4 py-3 rounded-xl border border-navy-600">
+          <div class="flex items-center gap-2 text-xs text-navy-100">
+            <span>Progres Sesi 2 (180 Menit):</span>
+            <span id="progress-percent" class="font-bold text-gold-400 text-sm">0%</span>
+          </div>
+          <div class="w-full sm:w-52 bg-navy-900 rounded-full h-2.5 overflow-hidden border border-navy-600">
+            <div id="progress-bar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <span id="progress-label" class="text-[11px] text-navy-200">0 dari 6 tahapan selesai</span>
+        </div>
+      </div>
+      
+      <!-- TOMBOL PANDUAN & INDIKATOR PROGRES -->
+      <div class="flex flex-col sm:items-end gap-2">
+        <button onclick="openGuideModal()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-gold-400 hover:bg-gold-500 text-navy-900 text-xs font-extrabold shadow transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Panduan Penggunaan Peserta
+        </button>
+      
+        <!-- ALUR BELAJAR 6 TAHAPAN SESI 2 -->
+      <div class="mt-5 pt-4 border-t border-navy-700">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold uppercase tracking-wide text-navy-200">Alur Belajar Sesi 2 (Klik tahapan untuk menandai selesai)</span>
+          <button onclick="resetProgress()" class="text-[11px] text-navy-200 hover:text-gold-400 underline">Reset Progres</button>
+        </div>
+        <div id="stage-tracker" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVIGASI TAB UTAMA -->
+  <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex overflow-x-auto gap-2 py-3">
+        <button onclick="switchTab('tab-1')" id="btn-tab-1" class="tab-btn active whitespace-nowrap px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-300 transition">1. Pengantar &amp; Keamanan Data</button>
+        <button onclick="switchTab('tab-2')" id="btn-tab-2" class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-300 text-slate-700 hover:bg-slate-100 transition">2. Penerapan AI (6 Bidang)</button>
+        <button onclick="switchTab('tab-3')" id="btn-tab-3" class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-300 text-slate-700 hover:bg-slate-100 transition">3. Lab Analisis Data</button>
+        <button onclick="switchTab('tab-4')" id="btn-tab-4" class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-300 text-slate-700 hover:bg-slate-100 transition">4. Studio LKJIP &amp; SAKIP</button>
+        <button onclick="switchTab('tab-5')" id="btn-tab-5" class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-300 text-slate-700 hover:bg-slate-100 transition">5. Pustaka Prompt, Kuis &amp; Rencana Aksi</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- KONTEN UTAMA -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 space-y-6 no-print">
+
+    <!-- TAB 1: PENGANTAR & CHECKLIST KEAMANAN DATA -->
+    <section id="tab-1" class="tab-panel space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h2 class="text-xl font-bold text-navy-800">Ulasan Sesi 1 &amp; Prinsip Kerja Sesi 2</h2>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">40% Paparan • 60% Praktik Langsung</span>
+          </div>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Pada <strong>Sesi 2</strong>, peserta menerapkan langsung AI generatif pada tugas teknis masing-masing bidang di Disnakertrans Provinsi Maluku Utara, pengolahan data ketenagakerjaan, dan penyusunan laporan kinerja untuk menghasilkan <strong>Pustaka Prompt Bidang</strong> serta <strong>Rencana Aksi Inovasi</strong>.
+          </p>
+
+          <div class="bg-navy-50 border border-navy-100 rounded-xl p-4">
+            <h3 class="text-sm font-bold text-navy-800 mb-3">Rumus 5 Unsur Prompt Efektif ASN</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 text-xs">
+              <div class="bg-white p-3 rounded-lg border border-navy-100"><span class="font-bold text-navy-700 block mb-1">1. Peran</span><p class="text-slate-600">Posisi AI (mis. Pengawas / Mediator).</p></div>
+              <div class="bg-white p-3 rounded-lg border border-navy-100"><span class="font-bold text-navy-700 block mb-1">2. Konteks</span><p class="text-slate-600">Situasi, lokasi Malut, dan regulasi.</p></div>
+              <div class="bg-white p-3 rounded-lg border border-navy-100"><span class="font-bold text-navy-700 block mb-1">3. Tugas</span><p class="text-slate-600">Instruksi spesifik: draf, ringkas, analisis.</p></div>
+              <div class="bg-white p-3 rounded-lg border border-navy-100"><span class="font-bold text-navy-700 block mb-1">4. Format</span><p class="text-slate-600">Tabel, poin, nota dinas, atau narasi.</p></div>
+              <div class="bg-white p-3 rounded-lg border border-navy-100"><span class="font-bold text-navy-700 block mb-1">5. Contoh</span><p class="text-slate-600">Patokan gaya bahasa formal ASN.</p></div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-sm font-bold text-navy-800 mb-2.5">Alur Belajar 4 Tahap Pelatihan AI Disnakertrans</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50"><span class="font-bold text-navy-700">Tahap 1 – Fondasi (Sesi 1)</span><p class="text-slate-600 mt-1">Cara kerja AI generatif, kemampuan, risiko halusinasi, dan kewajiban verifikasi aparatur.</p></div>
+              <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50"><span class="font-bold text-navy-700">Tahap 2 – Praktik Administrasi (Sesi 1)</span><p class="text-slate-600 mt-1">Prompting bertahap untuk surat dinas, nota dinas, telaahan staf, dan notulen rapat.</p></div>
+              <div class="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/60"><span class="font-bold text-emerald-800">Tahap 3 – Implementasi Bidang &amp; Data (Sesi 2)</span><p class="text-slate-600 mt-1">Penerapan pada 6 bidang Disnakertrans, olah data Excel anonim, serta penyusunan LKJIP &amp; SAKIP.</p></div>
+              <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/60"><span class="font-bold text-amber-900">Tahap 4 – Etika, Keamanan Data &amp; Inovasi</span><p class="text-slate-600 mt-1">Kepatuhan UU PDP &amp; SPBE, penetapan Champion AI per bidang, dan rencana aksi 1–3 bulan.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checklist Keamanan Data -->
+        <div class="bg-white rounded-2xl border-2 border-amber-300 p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <h2 class="text-lg font-bold text-navy-900">Checklist Keamanan &amp; Etika Data</h2>
+              <span id="security-badge" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">Wajib Dicentang</span>
+            </div>
+            <p class="text-xs text-slate-600 mb-4">Centang seluruh komitmen berikut sebelum memulai praktik langsung:</p>
+            <div class="space-y-3 text-xs">
+              <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer"><input type="checkbox" class="sec-check mt-0.5 w-4 h-4 accent-emerald-600" onchange="updateSecurityStatus()" /><span><strong>Bebas NIK &amp; Data Pribadi:</strong> Tidak memasukkan NIK, nama lengkap pekerja, atau kontak pribadi ke AI.</span></label>
+              <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer"><input type="checkbox" class="sec-check mt-0.5 w-4 h-4 accent-emerald-600" onchange="updateSecurityStatus()" /><span><strong>Bebas Rahasia Perusahaan:</strong> Menyamarkan nama perusahaan (PT A/X) dan tidak mengunggah dokumen berklasifikasi.</span></label>
+              <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer"><input type="checkbox" class="sec-check mt-0.5 w-4 h-4 accent-emerald-600" onchange="updateSecurityStatus()" /><span><strong>Verifikasi &amp; Anti-Halusinasi:</strong> Memeriksa ulang angka, pasal regulasi, dan tanggung jawab isi dokumen tetap pada ASN.</span></label>
+              <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer"><input type="checkbox" class="sec-check mt-0.5 w-4 h-4 accent-emerald-600" onchange="updateSecurityStatus()" /><span><strong>Anonimisasi Data Latihan:</strong> Data Excel/tabel yang dipakai praktik telah dianonimkan.</span></label>
+            </div>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-200">
+            <p class="text-[11px] font-bold text-navy-800 uppercase tracking-wide mb-1.5">Rujukan Regulasi:</p>
+            <ul class="text-[11px] text-slate-600 space-y-1 list-disc list-inside">
+              <li>UU No. 27 Tahun 2022 (UU PDP)</li>
+              <li>Perpres No. 95 Tahun 2018 (SPBE)</li>
+              <li>SE Menkominfo No. 9 Tahun 2023 (Etika AI)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: PENERAPAN AI PER BIDANG -->
+    <section id="tab-2" class="tab-panel hidden space-y-5">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-navy-800">Penerapan AI pada 6 Bidang Disnakertrans Maluku Utara</h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">Setiap bidang memiliki 1 prompt <strong>Demo Fasilitator (5 Menit)</strong> dan 2 prompt <strong>Praktik Kelompok (15–20 Menit)</strong>.</p>
+          </div>
+        </div>
+        <div id="bidang-tabs" class="flex flex-wrap gap-2 pb-5 border-b border-slate-200"></div>
+        <div id="bidang-content" class="mt-5"></div>
+      </div>
+    </section>
+
+    <!-- TAB 3: LAB PENGOLAHAN & ANALISIS DATA -->
+    <section id="tab-3" class="tab-panel hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-bold text-navy-800">Lab Pengolahan &amp; Analisis Data Ketenagakerjaan (Anonim)</h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">Salin tabel anonim di bawah ke Excel atau AI untuk latihan pembersihan data, rumus, dan narasi tren.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <select id="dataset-selector" onchange="renderDataset()" class="text-xs sm:text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white font-semibold text-navy-800">
+              <option value="pencaker">Data Pencari Kerja &amp; Penempatan (Anonim)</option>
+              <option value="tka">Data Penggunaan TKA per Sektor (Anonim)</option>
+              <option value="phk">Data Kasus PHK &amp; Mediasi (Anonim)</option>
+              <option value="blk">Data Peserta Pelatihan UPTD BLK (Anonim)</option>
+            </select>
+            <button onclick="copyCurrentDataset(this)" class="px-4 py-2 rounded-lg bg-navy-700 hover:bg-navy-800 text-white text-xs sm:text-sm font-semibold transition">Salin Tabel (Excel/AI)</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table id="dataset-table" class="min-w-full text-xs text-left"></table>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-4">
+          <h3 class="text-base font-bold text-navy-800">Panduan Langkah demi Langkah &amp; Prompt Siap Salin</h3>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-bold uppercase text-emerald-700">Langkah 1: Bersihkan &amp; Rapikan Data Excel</span>
+              <button onclick="copyPromptById('data-p1', this)" class="px-3 py-1 rounded-md bg-navy-50 hover:bg-navy-100 text-navy-800 text-xs font-semibold border border-navy-200">Salin Prompt</button>
+            </div>
+            <pre id="data-p1" class="text-xs bg-slate-50 p-3 rounded-lg border border-slate-200 whitespace-pre-wrap font-mono text-slate-700">Bertindaklah sebagai Analis Data Ketenagakerjaan Pemerintah. Saya memiliki tabel data mentah (anonim) berikut: [TEMPEL DATA].
+Tugas Anda:
+1. Identifikasi inkonsistensi penulisan (huruf kapital, spasi ganda, format angka, atau duplikasi).
+2. Sajikan kembali tabel yang sudah bersih dan standar.
+3. Berikan rumus Excel (TRIM, PROPER, COUNTIF) agar saya dapat membersihkannya otomatis di Microsoft Excel.</pre>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-bold uppercase text-emerald-700">Langkah 2: Rumus, Tabel Ringkasan &amp; Rekomendasi Grafik</span>
+              <button onclick="copyPromptById('data-p2', this)" class="px-3 py-1 rounded-md bg-navy-50 hover:bg-navy-100 text-navy-800 text-xs font-semibold border border-navy-200">Salin Prompt</button>
+            </div>
+            <pre id="data-p2" class="text-xs bg-slate-50 p-3 rounded-lg border border-slate-200 whitespace-pre-wrap font-mono text-slate-700">Berdasarkan data anonim berikut: [TEMPEL DATA].
+Tugas Anda:
+1. Buat tabel rekapitulasi total per kabupaten/kota atau per sektor.
+2. Tuliskan rumus Excel (SUMIFS, COUNTIFS, dan persentase capaian) untuk tabel rekap tersebut.
+3. Sarankan 2 jenis grafik paling informatif untuk bahan paparan Kepala Dinas.</pre>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-bold uppercase text-emerald-700">Langkah 3: Narasi Tren &amp; Rekomendasi Kebijakan</span>
+              <button onclick="copyPromptById('data-p3', this)" class="px-3 py-1 rounded-md bg-navy-50 hover:bg-navy-100 text-navy-800 text-xs font-semibold border border-navy-200">Salin Prompt</button>
+            </div>
+            <pre id="data-p3" class="text-xs bg-slate-50 p-3 rounded-lg border border-slate-200 whitespace-pre-wrap font-mono text-slate-700">Bertindaklah sebagai Perencana Ahli di Disnakertrans Provinsi Maluku Utara. Dari ringkasan data berikut: [TEMPEL REKAP DATA].
+Susun narasi analisis formal sepanjang 3 paragraf yang memuat tren utama, faktor penyebab di konteks pasar kerja Maluku Utara, serta 3 rekomendasi tindak lanjut. Jangan mengarang angka di luar data.</pre>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm h-fit">
+          <h3 class="text-base font-bold text-navy-800 mb-2">Checklist Verifikasi Silang</h3>
+          <p class="text-xs text-slate-600 mb-4">Periksa 5 hal ini sebelum memasukkan hasil AI ke laporan resmi:</p>
+          <div class="space-y-2.5 text-xs">
+            <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200"><input type="checkbox" class="mt-0.5 w-4 h-4 accent-navy-700" /><span>Jumlah total baris &amp; penjumlahan sesuai Excel sumber.</span></label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200"><input type="checkbox" class="mt-0.5 w-4 h-4 accent-navy-700" /><span>Persentase telah dihitung ulang secara manual/Excel.</span></label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200"><input type="checkbox" class="mt-0.5 w-4 h-4 accent-navy-700" /><span>Rumus Excel sudah diuji coba dan bebas error.</span></label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200"><input type="checkbox" class="mt-0.5 w-4 h-4 accent-navy-700" /><span>Nama kabupaten/kota di Maluku Utara sudah tepat.</span></label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200"><input type="checkbox" class="mt-0.5 w-4 h-4 accent-navy-700" /><span>Narasi objektif dan tidak melebih-lebihkan data.</span></label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: STUDIO LAPORAN KINERJA (LKJIP & SAKIP) -->
+    <section id="tab-4" class="tab-panel hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h2 class="text-xl font-bold text-navy-800">Studio Prompt Laporan Kinerja (LKJIP, SAKIP &amp; Triwulan)</h2>
+        <p class="text-xs sm:text-sm text-slate-600 mt-1 mb-5">Isi parameter capaian kinerja bidang Anda untuk merakit prompt laporan kinerja yang terstruktur.</p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="space-y-3.5 text-xs sm:text-sm">
+            <div>
+              <label class="block font-semibold text-navy-800 mb-1">Jenis Laporan</label>
+              <select id="lkjip-jenis" onchange="buildLkjipPrompt()" class="w-full border border-slate-300 rounded-lg px-3 py-2 bg-white">
+                <option value="Narasi Bab III LKJIP (Akuntabilitas Kinerja)">Narasi Bab III LKJIP (Akuntabilitas Kinerja)</option>
+                <option value="Bahan Evaluasi SAKIP & Pohon Kinerja">Bahan Evaluasi SAKIP &amp; Pohon Kinerja</option>
+                <option value="Laporan Capaian Bulanan / Triwulan Bidang">Laporan Capaian Bulanan / Triwulan Bidang</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-navy-800 mb-1">Bidang / Unit Kerja</label>
+              <input id="lkjip-bidang" oninput="buildLkjipPrompt()" type="text" value="Bidang Penempatan dan Perluasan Kesempatan Kerja" class="w-full border border-slate-300 rounded-lg px-3 py-2" />
+            </div>
+            <div>
+              <label class="block font-semibold text-navy-800 mb-1">Indikator Kinerja Utama (IKU)</label>
+              <input id="lkjip-iku" oninput="buildLkjipPrompt()" type="text" value="Persentase pencari kerja terdaftar yang ditempatkan di sektor formal/industri Maluku Utara" class="w-full border border-slate-300 rounded-lg px-3 py-2" />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div><label class="block font-semibold text-navy-800 mb-1">Target</label><input id="lkjip-target" oninput="buildLkjipPrompt()" type="text" value="75% (1.200 orang)" class="w-full border border-slate-300 rounded-lg px-3 py-2" /></div>
+              <div><label class="block font-semibold text-navy-800 mb-1">Realisasi</label><input id="lkjip-realisasi" oninput="buildLkjipPrompt()" type="text" value="68% (1.088 orang)" class="w-full border border-slate-300 rounded-lg px-3 py-2" /></div>
+            </div>
+            <div>
+              <label class="block font-semibold text-navy-800 mb-1">Kendala Utama di Lapangan</label>
+              <textarea id="lkjip-kendala" oninput="buildLkjipPrompt()" rows="2" class="w-full border border-slate-300 rounded-lg px-3 py-2">Kesenjangan sertifikasi kompetensi teknis lokal terhadap syarat industri smelter serta keterlambatan pelaporan lowongan.</textarea>
+            </div>
+          </div>
+
+          <div class="flex flex-col">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold uppercase text-emerald-700">Hasil Prompt Siap Salin</span>
+              <button onclick="copyPromptById('lkjip-output', this)" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition">Salin Prompt LKJIP</button>
+            </div>
+            <pre id="lkjip-output" class="flex-1 text-xs bg-navy-900 text-slate-100 p-4 rounded-xl whitespace-pre-wrap font-mono leading-relaxed overflow-auto"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: PUSTAKA PROMPT, RENCANA AKSI & KUIS -->
+    <section id="tab-5" class="tab-panel hidden space-y-6">
+      <!-- Pustaka Prompt -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 class="text-xl font-bold text-navy-800">Pustaka Prompt ASN Disnakertrans</h2>
+            <p class="text-xs text-slate-600">Simpan prompt terbaik hasil diskusi kelompok bidang Anda (tersimpan di <code>localStorage</code>).</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <select id="filter-pustaka" onchange="renderPustaka()" class="text-xs border border-slate-300 rounded-lg px-3 py-2 bg-white font-semibold">
+              <option value="Semua">Semua Bidang</option>
+              <option value="Pengawasan & K3">Pengawasan &amp; K3</option>
+              <option value="Hubungan Industrial">Hubungan Industrial</option>
+              <option value="Pelatihan & BLK">Pelatihan &amp; BLK</option>
+              <option value="Penempatan & TKA">Penempatan &amp; TKA</option>
+              <option value="Transmigrasi">Transmigrasi</option>
+              <option value="Sekretariat">Sekretariat</option>
+            </select>
+            <button onclick="exportPustakaTxt()" class="px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition">Ekspor (.TXT)</button>
+          </div>
+        </div>
+
+        <form onsubmit="addPromptToLibrary(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
+          <input id="lib-judul" required type="text" placeholder="Judul Prompt" class="md:col-span-2 border border-slate-300 rounded-lg px-3 py-2 bg-white" />
+          <select id="lib-bidang" class="border border-slate-300 rounded-lg px-3 py-2 bg-white">
+            <option value="Pengawasan & K3">Pengawasan &amp; K3</option>
+            <option value="Hubungan Industrial">Hubungan Industrial</option>
+            <option value="Pelatihan & BLK">Pelatihan &amp; BLK</option>
+            <option value="Penempatan & TKA">Penempatan &amp; TKA</option>
+            <option value="Transmigrasi">Transmigrasi</option>
+            <option value="Sekretariat">Sekretariat</option>
+          </select>
+          <button type="submit" class="bg-navy-700 hover:bg-navy-800 text-white font-semibold rounded-lg px-4 py-2 transition">+ Simpan</button>
+          <textarea id="lib-isi" required rows="2" placeholder="Tuliskan teks prompt lengkap..." class="md:col-span-4 border border-slate-300 rounded-lg px-3 py-2 bg-white font-mono"></textarea>
+        </form>
+        <div id="pustaka-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <!-- Form Rencana Aksi Inovasi -->
+      <div class="bg-white rounded-2xl border-2 border-navy-200 p-6 shadow-sm space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-bold text-navy-800">Formulir Rencana Aksi 1 Inovasi AI per Bidang</h2>
+            <p class="text-xs text-slate-600">Susun 1 inovasi kecil berbasis AI yang dapat dipantau dalam 1–3 bulan ke depan.</p>
+          </div>
+          <button onclick="previewAndPrint()" class="px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-sm transition">Pratinjau &amp; Cetak / Simpan PDF</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+          <div>
+            <label class="block font-semibold text-navy-800 mb-1">Nama Bidang / UPTD</label>
+            <select id="aksi-bidang" oninput="saveActionPlan()" class="w-full border border-slate-300 rounded-lg px-3 py-2 bg-white">
+              <option>Pengawasan Ketenagakerjaan &amp; K3</option>
+              <option>Hubungan Industrial &amp; Jamsostek</option>
+              <option>Pelatihan &amp; Produktivitas (UPTD/BLK)</option>
+              <option>Penempatan &amp; Perluasan Kesempatan Kerja</option>
+              <option>Bidang Transmigrasi</option>
+              <option>Sekretariat</option>
+            </select>
+          </div>
+          <div><label class="block font-semibold text-navy-800 mb-1">Nama Inovasi AI</label><input id="aksi-nama" oninput="saveActionPlan()" type="text" placeholder="Contoh: Asisten Prompt Telaah Cepat Draf PP/PKB" class="w-full border border-slate-300 rounded-lg px-3 py-2" /></div>
+          <div class="md:col-span-2"><label class="block font-semibold text-navy-800 mb-1">Masalah yang Diselesaikan</label><textarea id="aksi-masalah" oninput="saveActionPlan()" rows="2" placeholder="Jelaskan hambatan pekerjaan rutin..." class="w-full border border-slate-300 rounded-lg px-3 py-2"></textarea></div>
+          <div><label class="block font-semibold text-navy-800 mb-1">Target Output (1–3 Bulan)</label><textarea id="aksi-target" oninput="saveActionPlan()" rows="2" placeholder="Target terukur dalam 1–3 bulan..." class="w-full border border-slate-300 rounded-lg px-3 py-2"></textarea></div>
+          <div>
+            <label class="block font-semibold text-navy-800 mb-1">Champion AI / Penanggung Jawab</label>
+            <input id="aksi-pic" oninput="saveActionPlan()" type="text" placeholder="Nama & Jabatan Champion AI" class="w-full border border-slate-300 rounded-lg px-3 py-2 mb-2" />
+            <input id="aksi-anggota" oninput="saveActionPlan()" type="text" placeholder="Tim Pendukung / Anggota Kelompok" class="w-full border border-slate-300 rounded-lg px-3 py-2" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Kuis Evaluasi -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h2 class="text-lg font-bold text-navy-800">Evaluasi Singkat Pemahaman Peserta (Tes Akhir)</h2>
+            <p class="text-xs text-slate-600">Mengukur pemahaman konsep AI, teknik prompt, dan keamanan data ASN.</p>
+          </div>
+          <span id="quiz-score" class="hidden px-3 py-1 rounded-full text-xs font-bold bg-navy-100 text-navy-800"></span>
+        </div>
+        <div id="quiz-container" class="space-y-3 text-xs sm:text-sm"></div>
+        <button onclick="evaluateQuiz()" class="px-4 py-2 rounded-lg bg-navy-700 hover:bg-navy-800 text-white text-xs sm:text-sm font-semibold transition">Periksa Jawaban</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- AREA CETAK PDF RENCANA AKSI (DENGAN LOGO MALUKU UTARA) -->
+  <div id="print-area" class="hidden max-w-4xl mx-auto bg-white p-8 border border-slate-300 rounded-xl my-6">
+    <div class="flex items-center justify-center gap-4 border-b-4 border-double border-navy-900 pb-4 mb-6">
+      <img src="assets/logo-malut.png" alt="Logo Maluku Utara" class="w-16 h-16 object-contain" />
+      <div class="text-center">
+        <p class="text-xs uppercase font-bold tracking-widest text-slate-600">Pemerintah Provinsi Maluku Utara</p>
+        <h2 class="text-xl font-extrabold text-navy-900">DINAS TENAGA KERJA DAN TRANSMIGRASI</h2>
+        <p class="text-xs text-slate-600 mt-0.5">Lembar Rencana Aksi Inovasi Pemanfaatan AI (Output Pelatihan Sesi 2 – Tahun 2026)</p>
+      </div>
+    </div>
+
+    <table class="w-full text-sm border-collapse border border-slate-300 mb-6">
+      <tbody>
+        <tr><td class="border border-slate-300 p-3 font-bold bg-slate-50 w-1/3">Bidang / Unit Kerja</td><td id="p-bidang" class="border border-slate-300 p-3">-</td></tr>
+        <tr><td class="border border-slate-300 p-3 font-bold bg-slate-50">Nama Inovasi Berbasis AI</td><td id="p-nama" class="border border-slate-300 p-3 font-semibold">-</td></tr>
+        <tr><td class="border border-slate-300 p-3 font-bold bg-slate-50">Masalah yang Diselesaikan</td><td id="p-masalah" class="border border-slate-300 p-3 whitespace-pre-line">-</td></tr>
+        <tr><td class="border border-slate-300 p-3 font-bold bg-slate-50">Target Output (1–3 Bulan)</td><td id="p-target" class="border border-slate-300 p-3 whitespace-pre-line">-</td></tr>
+        <tr><td class="border border-slate-300 p-3 font-bold bg-slate-50">Champion AI / Penanggung Jawab</td><td id="p-pic" class="border border-slate-300 p-3">-</td></tr>
+        <tr><td class="border border-slate-300 p-3 font-bold bg-slate-50">Tim Pendukung</td><td id="p-anggota" class="border border-slate-300 p-3">-</td></tr>
+      </tbody>
+    </table>
+
+    <div class="text-xs text-slate-600 flex justify-between items-end pt-6">
+      <div>
+        <p class="font-semibold">Komitmen Keamanan Data:</p>
+        <p>Pelaksanaan inovasi ini mematuhi UU No. 27/2022 (UU PDP), Perpres No. 95/2018 (SPBE), dan SE Menkominfo No. 9/2023.</p>
+      </div>
+      <div class="text-center min-w-[180px]">
+        <p>Sofifi / Ternate, 2026</p>
+        <p class="mt-12 font-bold underline" id="p-ttd">Champion AI Bidang</p>
+      </div>
+    </div>
+
+    <div class="mt-6 flex justify-end gap-2 no-print">
+      <button onclick="closePrintPreview()" class="px-4 py-2 rounded-lg border border-slate-300 text-xs font-semibold">Tutup Pratinjau</button>
+      <button onclick="window.print()" class="px-4 py-2 rounded-lg bg-navy-800 text-white text-xs font-semibold">Cetak / Simpan PDF</button>
+    </div>
+  </div>
+
+  <footer class="bg-white border-t border-slate-200 py-5 mt-10 no-print">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+      Portal Panduan Pelatihan Pemanfaatan AI (Sesi 2) • Dinas Tenaga Kerja dan Transmigrasi Provinsi Maluku Utara • 2026
+    </div>
+  </footer>
+
+  <!-- MODAL PANDUAN PENGGUNAAN UNTUK PESERTA -->
+<div id="guide-modal" class="hidden fixed inset-0 z-50 bg-navy-900/75 backdrop-blur-sm flex items-center justify-center p-4 no-print">
+  <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
+    <!-- Header Modal -->
+    <div class="sticky top-0 bg-navy-900 text-white px-6 py-4 flex items-center justify-between border-b-4 border-gold-400">
+      <div>
+        <p class="text-[11px] uppercase tracking-wider text-gold-400 font-bold">Petunjuk Praktis Peserta</p>
+        <h3 class="text-base sm:text-lg font-extrabold">Cara Menggunakan Portal Pelatihan AI (Sesi 2)</h3>
+      </div>
+      <button onclick="closeGuideModal()" class="text-navy-200 hover:text-white text-2xl leading-none font-bold px-2">&times;</button>
+    </div>
+
+    <!-- Isi Panduan -->
+    <div class="p-6 space-y-4 text-xs sm:text-sm text-slate-700">
+      <div class="bg-navy-50 border border-navy-100 rounded-xl p-3.5">
+        <p class="font-bold text-navy-900 mb-1">Persiapan Sebelum Mulai:</p>
+        <p class="text-xs text-slate-600">
+          Buka portal ini di satu tab browser laptop/ponsel Anda, lalu buka layanan AI pilihan Anda (<strong>ChatGPT, Gemini, Claude, atau Microsoft Copilot</strong> versi gratis) pada tab browser di sebelahnya agar mudah menyalin dan menempel prompt.
+        </p>
+      </div>
+
+      <ol class="space-y-3">
+        <li class="flex gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50/70">
+          <span class="w-6 h-6 rounded-full bg-navy-800 text-white font-bold text-xs flex items-center justify-center shrink-0">1</span>
+          <div>
+            <p class="font-bold text-navy-900">Centang Checklist Keamanan Data (Tab 1)</p>
+            <p class="text-xs text-slate-600 mt-0.5">Sebelum praktik, baca dan centang seluruh 4 poin komitmen keamanan data. Pastikan tidak ada NIK, nama pekerja asli, atau dokumen rahasia perusahaan yang dimasukkan ke AI.</p>
+          </div>
+        </li>
+
+        <li class="flex gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50/70">
+          <span class="w-6 h-6 rounded-full bg-navy-800 text-white font-bold text-xs flex items-center justify-center shrink-0">2</span>
+          <div>
+            <p class="font-bold text-navy-900">Pilih Bidang &amp; Salin Prompt (Tab 2)</p>
+            <p class="text-xs text-slate-600 mt-0.5">Klik sub-tab sesuai bidang Anda. Klik tombol <strong>"Salin Prompt"</strong>, lalu tempel (<em>Paste / Ctrl+V</em>) ke jendela chat AI. Ganti bagian di dalam tanda kurung siku <code>[...]</code> dengan data anonim bidang Anda.</p>
+          </div>
+        </li>
+
+        <li class="flex gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50/70">
+          <span class="w-6 h-6 rounded-full bg-navy-800 text-white font-bold text-xs flex items-center justify-center shrink-0">3</span>
+          <div>
+            <p class="font-bold text-navy-900">Latihan Olah Data &amp; LKJIP (Tab 3 &amp; Tab 4)</p>
+            <p class="text-xs text-slate-600 mt-0.5">Di Tab 3, klik <strong>"Salin Tabel (Excel/AI)"</strong> untuk menyalin data latihan anonim. Di Tab 4, cukup ketik target &amp; realisasi kinerja Anda, lalu salin prompt LKJIP yang otomatis terbentuk.</p>
+          </div>
+        </li>
+
+        <li class="flex gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50/70">
+          <span class="w-6 h-6 rounded-full bg-navy-800 text-white font-bold text-xs flex items-center justify-center shrink-0">4</span>
+          <div>
+            <p class="font-bold text-navy-900">Simpan Pustaka Prompt &amp; Cetak Rencana Aksi (Tab 5)</p>
+            <p class="text-xs text-slate-600 mt-0.5">Masukkan prompt terbaik kelompok ke <strong>Pustaka Prompt</strong> (dapat diunduh lewat tombol <strong>Ekspor .TXT</strong>). Isi formulir <strong>Rencana Aksi Inovasi</strong>, lalu klik <strong>"Pratinjau &amp; Cetak / Simpan PDF"</strong> untuk bahan presentasi akhir.</p>
+          </div>
+        </li>
+
+        <li class="flex gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50/70">
+          <span class="w-6 h-6 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shrink-0">5</span>
+          <div>
+            <p class="font-bold text-navy-900">Tandai Progres Belajar (Header Atas)</p>
+            <p class="text-xs text-slate-600 mt-0.5">Klik kotak 6 tahapan di bagian atas setiap kali kelompok Anda menyelesaikan satu tahap untuk memantau progres 180 menit Sesi 2.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900">
+        <strong>Catatan Penyimpanan:</strong> Progres, Pustaka Prompt, dan draf Rencana Aksi tersimpan otomatis di browser perangkat Anda (<code>localStorage</code>). Jangan membersihkan riwayat/<em>cache</em> browser sebelum sesi presentasi selesai.
+      </div>
+    </div>
+
+    <!-- Footer Modal -->
+    <div class="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex justify-end">
+      <button onclick="closeGuideModal()" class="px-5 py-2 rounded-lg bg-navy-800 hover:bg-navy-900 text-white text-xs sm:text-sm font-semibold transition">
+        Saya Mengerti, Mulai Praktik
+      </button>
+    </div>
+  </div>
+</div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
