@@ -1,5 +1,5 @@
 // Konfigurasi Koneksi Supabase (Dipakai bersama oleh index.html & admin.html)
-const SUPABASE_URL = 'https://supabase.com/dashboard/project/nyuqmwwsednjzmofzdhs';
+const SUPABASE_URL = 'https://nyuqmwwsednjzmofzdhs.supabase.co';
 const SUPABASE_ANON_KEY = 'ssb_publishable_aD2rhGGiKnPkExLWV2QEkg_UUoxZrtF';
 
 // PIN untuk membuka halaman admin.html (silakan ubah sebelum push ke GitHub)
