@@ -72,6 +72,11 @@
           </svg>
           Panduan Penggunaan Peserta
         </button>
+
+        <button onclick="toggleSpeakerModal(true)" class="print:hidden px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shrink-0">
+          <span>👤</span>
+          <span>Profil Narasumber</span>
+        </button>
       
         <!-- ALUR BELAJAR 6 TAHAPAN SESI 2 -->
       <div class="mt-5 pt-4 border-t border-navy-700">
@@ -110,7 +115,7 @@
     <div id="lock-notice" class="bg-blue-50 border border-blue-200 text-blue-900 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2">
       <span>🔒 <strong>Modul 2–5 terkunci otomatis.</strong> Selesaikan <strong>Pre-Test</strong> dan centang seluruh <strong>Checklist Keamanan Data (UU PDP)</strong> di Tab 1 untuk membukanya.</span>
     </div>
-    
+
     <!-- BAR PINTAS BUKA LAYANAN AI (UNTUK PRAKTIK LANGSUNG) -->
     <div class="bg-navy-50 border border-navy-200 rounded-xl px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div class="text-xs sm:text-sm text-navy-900">
@@ -638,5 +643,71 @@ Susun narasi analisis formal sepanjang 3 paragraf yang memuat tren utama, faktor
 
   <script src="data.js"></script>
   <script src="app.js"></script>
+  <!-- MODAL PROFIL NARASUMBER -->
+<div id="speaker-modal" class="print:hidden hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4" onclick="if(event.target === this) toggleSpeakerModal(false)">
+  <div class="bg-white max-w-lg w-full rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-fade-in">
+    
+    <!-- Header Modal -->
+    <div class="bg-navy-900 text-white px-6 py-5 flex items-center justify-between">
+      <div>
+        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">Narasumber Pelatihan AI 2026</span>
+        <h3 class="text-lg font-bold">Profil Narasumber</h3>
+      </div>
+      <button onclick="toggleSpeakerModal(false)" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-sm font-bold transition">
+        ✕
+      </button>
+    </div>
+
+    <!-- Isi Profil -->
+    <div class="p-6 space-y-5">
+      <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+        <!-- Foto dengan fallback inisial -->
+        <div class="w-20 h-20 rounded-full bg-navy-800 border-2 border-amber-400 flex items-center justify-center text-white font-bold text-2xl overflow-hidden shrink-0 shadow">
+          <img src="assets/foto-narasumber.jpg" alt="Abdul Mubarak" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <span style="display:none;" class="w-full h-full items-center justify-center">AM</span>
+        </div>
+
+        <div>
+          <h4 class="text-lg font-bold text-navy-900">Abdul Mubarak, [Gelar Anda]</h4>
+          <p class="text-xs sm:text-sm font-semibold text-emerald-700">Akademisi &amp; Praktisi Kecerdasan Artifisial / Sistem Informasi</p>
+          <p class="text-xs text-slate-500 mt-1">Narasumber Pelatihan Pemanfaatan AI – Disnakertrans Provinsi Maluku Utara</p>
+        </div>
+      </div>
+
+      <!-- Bidang Keahlian -->
+      <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2">
+        <p class="text-xs font-bold uppercase text-navy-800">Fokus Keahlian &amp; Riset</p>
+        <div class="flex flex-wrap gap-1.5 text-xs">
+          <span class="px-2.5 py-1 rounded-full bg-navy-100 text-navy-900 font-medium">Artificial Intelligence &amp; NLP</span>
+          <span class="px-2.5 py-1 rounded-full bg-navy-100 text-navy-900 font-medium">Machine Learning &amp; Analisis Data</span>
+          <span class="px-2.5 py-1 rounded-full bg-navy-100 text-navy-900 font-medium">Sistem Pendukung Keputusan</span>
+          <span class="px-2.5 py-1 rounded-full bg-navy-100 text-navy-900 font-medium">Transformasi Digital &amp; Smart Gov</span>
+        </div>
+      </div>
+
+      <!-- Bio Singkat -->
+      <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+        Aktif dalam pengajaran Sistem Informasi, penelitian pemanfaatan Kecerdasan Artifisial, serta pendampingan transformasi digital di sektor pendidikan dan pemerintahan.
+      </p>
+
+      <!-- Kontak (Opsional: hapus baris yang tidak diperlukan) -->
+      <div class="pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
+        <span>📧 <strong>Email:</strong> email-anda@domain.com</span>
+        <button onclick="toggleSpeakerModal(false)" class="px-4 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-900 text-white font-semibold transition">
+          Tutup
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function toggleSpeakerModal(show) {
+    const modal = document.getElementById('speaker-modal');
+    if (!modal) return;
+    modal.classList.toggle('hidden', !show);
+  }
+</script>
 </body>
 </html>
