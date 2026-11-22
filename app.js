@@ -272,7 +272,45 @@ function closePrintPreview() {
   document.getElementById('print-area').classList.add('hidden');
 }
 
-// ==================== 9. KUIS EVALUASI ====================
+// ==================== 9. TES AWAL (PRE-TEST) & TES AKHIR (POST-TEST) ====================
+function renderPreTest() {
+  const container = document.getElementById('pretest-container');
+  if (!container) return;
+  container.innerHTML = quizQuestions.map((item, idx) => `
+    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+      <p class="font-semibold text-navy-900 mb-2">${item.q}</p>
+      <div class="space-y-1.5">
+        ${item.options.map((opt, oIdx) => `
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="pre-q-${idx}" value="${oIdx}" class="accent-navy-700" />
+            <span class="text-slate-700">${opt}</span>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  const savedPre = localStorage.getItem('malut_ai_pretest');
+  if (savedPre !== null) {
+    const badge = document.getElementById('pretest-score');
+    badge.classList.remove('hidden');
+    badge.textContent = `Skor Tes Awal: ${savedPre}%`;
+  }
+}
+
+function evaluatePreTest() {
+  let score = 0;
+  quizQuestions.forEach((item, idx) => {
+    const selected = document.querySelector(`input[name="pre-q-${idx}"]:checked`);
+    if (selected && Number(selected.value) === item.ans) score++;
+  });
+  const pct = Math.round((score / quizQuestions.length) * 100);
+  localStorage.setItem('malut_ai_pretest', pct);
+  const badge = document.getElementById('pretest-score');
+  badge.classList.remove('hidden');
+  badge.textContent = `Skor Tes Awal: ${score} / ${quizQuestions.length} (${pct}%)`;
+}
+
 function renderQuiz() {
   document.getElementById('quiz-container').innerHTML = quizQuestions.map((item, idx) => `
     <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
@@ -295,9 +333,19 @@ function evaluateQuiz() {
     const selected = document.querySelector(`input[name="q-${idx}"]:checked`);
     if (selected && Number(selected.value) === item.ans) score++;
   });
+  const postPct = Math.round((score / quizQuestions.length) * 100);
   const badge = document.getElementById('quiz-score');
   badge.classList.remove('hidden');
-  badge.textContent = `Skor Anda: ${score} / ${quizQuestions.length} (${Math.round((score / quizQuestions.length) * 100)}%)`;
+  badge.textContent = `Skor Tes Akhir: ${score} / ${quizQuestions.length} (${postPct}%)`;
+
+  const prePct = localStorage.getItem('malut_ai_pretest');
+  const compBox = document.getElementById('score-comparison');
+  if (prePct !== null && compBox) {
+    const diff = postPct - Number(prePct);
+    const status = diff > 0 ? `Meningkat +${diff}%` : (diff === 0 ? "Stabil" : `Selisih ${diff}%`);
+    compBox.classList.remove('hidden');
+    compBox.innerHTML = `Perbandingan Pemahaman: Tes Awal <strong>${prePct}%</strong> → Tes Akhir <strong>${postPct}%</strong> (${status})`;
+  }
 }
 
 // ==================== 10. UTILITAS SALIN ====================
@@ -349,3 +397,31 @@ document.getElementById('guide-modal').addEventListener('click', (e) => {
 if (!localStorage.getItem('malut_ai_guide_seen')) {
   openGuideModal();
 }
+
+// ==================== 12. PROMPT BUILDER 5 UNSUR ====================
+function buildCustomPrompt() {
+  const peran = document.getElementById('pb-peran')?.value.trim() || '[PERAN AI]';
+  const konteks = document.getElementById('pb-konteks')?.value.trim() || '[KONTEKS PEKERJAAN ANONIM]';
+  const tugas = document.getElementById('pb-tugas')?.value.trim() || '[TUGAS SPESIFIK]';
+  const format = document.getElementById('pb-format')?.value.trim() || '[FORMAT KELUARAN]';
+  const contoh = document.getElementById('pb-contoh')?.value.trim();
+
+  let hasil = `Bertindaklah sebagai ${peran}.\n\nKonteks:\n${konteks}\n\nTugas Anda:\n${tugas}\n\nFormat Keluaran:\n${format}`;
+  if (contoh) hasil += `\n\nGaya Bahasa / Contoh Acuan:\n${contoh}`;
+  hasil += `\n\nCatatan: Jangan mengarang angka atau pasal regulasi; beri tanda [VERIFIKASI] jika perlu pengecekan manual.`;
+
+  const out = document.getElementById('pb-output');
+  if (out) out.textContent = hasil;
+}
+
+function sendBuilderToLibrary() {
+  const isi = document.getElementById('pb-output').textContent.trim();
+  const tugas = document.getElementById('pb-tugas').value.trim() || 'Perintah AI Kustom Bidang';
+  document.getElementById('lib-judul').value = tugas;
+  document.getElementById('lib-isi').value = isi;
+  document.getElementById('lib-judul').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// Jalankan inisialisasi fitur tambahan
+renderPreTest();
+buildCustomPrompt();

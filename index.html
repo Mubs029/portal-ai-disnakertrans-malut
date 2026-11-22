@@ -175,6 +175,23 @@
           </div>
         </div>
       </div>
+
+      <!-- FITUR 1: TES AWAL (PRE-TEST) -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">Langkah Awal Sesi 2</span>
+            <h2 class="text-lg font-bold text-navy-800 mt-1">Tes Awal Pemahaman (Pre-Test)</h2>
+            <p class="text-xs text-slate-600">Jawab 3 pertanyaan singkat ini sebelum mulai praktik untuk mengukur peningkatan pemahaman Anda di akhir sesi.</p>
+          </div>
+          <span id="pretest-score" class="hidden px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900"></span>
+        </div>
+        <div id="pretest-container" class="space-y-3 text-xs sm:text-sm"></div>
+        <button onclick="evaluatePreTest()" class="px-4 py-2 rounded-lg bg-navy-700 hover:bg-navy-800 text-white text-xs sm:text-sm font-semibold transition">
+          Simpan Skor Tes Awal
+        </button>
+      </div>
+
       <div class="flex justify-end pt-2">
         <button onclick="goToTab('tab-2')" class="px-5 py-2.5 rounded-xl bg-navy-800 hover:bg-navy-900 text-white text-xs sm:text-sm font-bold shadow transition">
           Lanjut: Penerapan AI (6 Bidang) →
@@ -341,6 +358,58 @@ Susun narasi analisis formal sepanjang 3 paragraf yang memuat tren utama, faktor
 
     <!-- TAB 5: PUSTAKA PROMPT, RENCANA AKSI & KUIS -->
     <section id="tab-5" class="tab-panel hidden space-y-6">
+
+      <!-- FITUR 3: PROMPT BUILDER BEBAS 5 UNSUR (TUGAS BAWAAN SESI 1) -->
+      <div class="bg-white rounded-2xl border-2 border-emerald-200 p-6 shadow-sm space-y-5">
+        <div>
+          <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Praktik Tugas Nyata Bawaan Sesi 1</span>
+          <h2 class="text-xl font-bold text-navy-800 mt-1">Rakit Perintah AI (Prompt Builder 5 Unsur)</h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-0.5">Gunakan form ini untuk menyusun perintah AI bebas sesuai pekerjaan nyata yang dibawa bidang Anda dari Sesi 1.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="space-y-3 text-xs sm:text-sm">
+            <div>
+              <label class="block font-semibold text-navy-800 mb-1">1. Peran AI</label>
+              <input id="pb-peran" oninput="buildCustomPrompt()" type="text" placeholder="Contoh: Pengawas Ketenagakerjaan Ahli di Disnakertrans Malut" class="w-full border border-slate-300 rounded-lg px-3 py-2" />
+            </div>
+            <div>
+              <label class="block font-semibold text-navy-800 mb-1">2. Konteks Pekerjaan (Pastikan Anonim)</label>
+              <textarea id="pb-konteks" oninput="buildCustomPrompt()" rows="2" placeholder="Contoh: Rekap temuan lapangan anonim dari Perusahaan X terkait kepatuhan APD..." class="w-full border border-slate-300 rounded-lg px-3 py-2"></textarea>
+            </div>
+            <div>
+              <label class="block font-semibold text-navy-800 mb-1">3. Tugas Spesifik</label>
+              <input id="pb-tugas" oninput="buildCustomPrompt()" type="text" placeholder="Contoh: Susun ringkasan temuan dan draf nota pemeriksaan pertama" class="w-full border border-slate-300 rounded-lg px-3 py-2" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-semibold text-navy-800 mb-1">4. Format Keluaran</label>
+                <input id="pb-format" oninput="buildCustomPrompt()" type="text" placeholder="Contoh: Tabel & poin formal" class="w-full border border-slate-300 rounded-lg px-3 py-2" />
+              </div>
+              <div>
+                <label class="block font-semibold text-navy-800 mb-1">5. Contoh / Gaya Bahasa (Opsional)</label>
+                <input id="pb-contoh" oninput="buildCustomPrompt()" type="text" placeholder="Contoh: Bahasa baku tata naskah dinas" class="w-full border border-slate-300 rounded-lg px-3 py-2" />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-bold uppercase text-emerald-700">Hasil Rakitan Perintah AI</span>
+              <div class="flex gap-2">
+                <button onclick="sendBuilderToLibrary()" class="px-3 py-1.5 rounded-lg bg-navy-100 hover:bg-navy-200 text-navy-900 text-xs font-semibold transition">
+                  + Masuk Pustaka
+                </button>
+                <button onclick="copyPromptById('pb-output', this)" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition">
+                  Salin Perintah
+                </button>
+              </div>
+            </div>
+            <pre id="pb-output" class="flex-1 text-xs bg-navy-900 text-slate-100 p-4 rounded-xl whitespace-pre-wrap font-mono leading-relaxed overflow-auto"></pre>
+          </div>
+        </div>
+      </div>
+
       <!-- Pustaka Prompt -->
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -422,6 +491,7 @@ Susun narasi analisis formal sepanjang 3 paragraf yang memuat tren utama, faktor
         </div>
         <div id="quiz-container" class="space-y-3 text-xs sm:text-sm"></div>
         <button onclick="evaluateQuiz()" class="px-4 py-2 rounded-lg bg-navy-700 hover:bg-navy-800 text-white text-xs sm:text-sm font-semibold transition">Periksa Jawaban</button>
+        <div id="score-comparison" class="hidden mt-3 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-900 font-semibold"></div>
       </div>
       <div class="flex justify-start pt-2">
         <button onclick="goToTab('tab-4')" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-semibold transition">
