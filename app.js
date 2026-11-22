@@ -425,3 +425,75 @@ function sendBuilderToLibrary() {
 // Jalankan inisialisasi fitur tambahan
 renderPreTest();
 buildCustomPrompt();
+
+// ==================== 13. SINKRONISASI MODUL REAL-TIME (SUPABASE) ====================
+let activeModulesMap = { 'tab-1': true, 'tab-2': true, 'tab-3': true, 'tab-4': true, 'tab-5': true };
+
+function applyModuleVisibility(rows) {
+  rows.forEach(row => {
+    if (row.id === 'banner') {
+      const bannerEl = document.getElementById('live-banner');
+      const textEl = document.getElementById('live-banner-text');
+      if (bannerEl && textEl) {
+        if (row.is_active && row.pesan) {
+          textEl.textContent = row.pesan;
+          bannerEl.classList.remove('hidden');
+        } else {
+          bannerEl.classList.add('hidden');
+        }
+      }
+      return;
+    }
+
+    activeModulesMap[row.id] = row.is_active;
+    const btn = document.getElementById('btn-' + row.id);
+    if (!btn) return;
+
+    if (row.is_active) {
+      btn.disabled = false;
+      btn.classList.remove('opacity-40', 'cursor-not-allowed');
+      btn.textContent = btn.textContent.replace('🔒 ', '');
+    } else {
+      btn.disabled = true;
+      btn.classList.add('opacity-40', 'cursor-not-allowed');
+      if (!btn.textContent.startsWith('🔒 ')) {
+        btn.textContent = '🔒 ' + btn.textContent;
+      }
+    }
+  });
+
+  // Jika peserta sedang berada di tab yang baru saja dikunci fasilitator, pindahkan ke tab aktif pertama
+  const currentActiveSection = document.querySelector('.tab-content:not(.hidden)');
+  if (currentActiveSection && activeModulesMap[currentActiveSection.id] === false) {
+    const firstOpen = Object.keys(activeModulesMap).find(id => activeModulesMap[id]);
+    if (firstOpen) switchTab(firstOpen);
+  }
+}
+
+// Lindungi fungsi goToTab agar tidak bisa melompat ke tab yang sedang dikunci
+const _originalGoToTab = goToTab;
+goToTab = function(tabId) {
+  if (activeModulesMap[tabId] === false) {
+    alert('Modul ini belum dibuka oleh Fasilitator. Silakan tunggu arahan selanjutnya.');
+    return;
+  }
+  _originalGoToTab(tabId);
+};
+
+async function initRealtimeControl() {
+  if (typeof sbClient === 'undefined' || !sbClient) return;
+
+  // 1. Ambil status modul saat halaman pertama kali dibuka
+  const { data, error } = await sbClient.from('modul_config').select('*');
+  if (!error && data) applyModuleVisibility(data);
+
+  // 2. Dengarkan perubahan real-time dari admin.html
+  sbClient
+    .channel('modul-config-changes')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'modul_config' }, (payload) => {
+      applyModuleVisibility([payload.new]);
+    })
+    .subscribe();
+}
+
+initRealtimeControl();

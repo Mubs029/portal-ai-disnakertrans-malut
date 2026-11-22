@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Fasilitator | Portal AI Disnakertrans Malut</title>
+  <link rel="icon" type="image/png" href="assets/logo-malut.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen font-sans">
+
+  <!-- LAYAR LOGIN PIN FASILITATOR -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white max-w-sm w-full rounded-2xl shadow-lg border border-slate-200 p-6 space-y-4 text-center">
+      <img src="assets/logo-malut.png" alt="Logo Maluku Utara" class="w-16 h-16 mx-auto object-contain" />
+      <div>
+        <h1 class="text-lg font-bold text-slate-900">Panel Kontrol Fasilitator</h1>
+        <p class="text-xs text-slate-500">Pelatihan AI Disnakertrans Provinsi Maluku Utara</p>
+      </div>
+      <div class="space-y-2 text-left">
+        <label class="text-xs font-semibold text-slate-700">Masukkan PIN Fasilitator</label>
+        <input id="pin-input" type="password" inputmode="numeric" placeholder="****"
+          class="w-full text-center tracking-widest text-lg font-bold border border-slate-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-900" />
+        <p id="pin-error" class="hidden text-xs text-red-600 font-medium text-center">PIN salah, silakan coba lagi.</p>
+      </div>
+      <button onclick="checkPin()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition">
+        Masuk Panel Kontrol
+      </button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD KONTROL MODUL -->
+  <div id="admin-dashboard" class="hidden max-w-3xl mx-auto p-4 sm:p-6 space-y-6">
+    <header class="bg-slate-900 text-white rounded-2xl p-5 flex items-center justify-between gap-4 shadow">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo-malut.png" alt="Logo" class="w-11 h-11 object-contain" />
+        <div>
+          <h1 class="text-base sm:text-lg font-bold">Kontrol Modul Real-Time</h1>
+          <p class="text-xs text-amber-300">Disnakertrans Provinsi Maluku Utara • Sesi 2</p>
+        </div>
+      </div>
+      <a href="index.html" target="_blank" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-semibold">
+        Lihat Web ↗
+      </a>
+    </header>
+
+    <!-- STATUS KONEKSI -->
+    <div id="conn-status" class="text-xs font-semibold px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800">
+      Menghubungkan ke Supabase...
+    </div>
+
+    <!-- TOMBOL PRESET CEPAT -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+      <h2 class="text-sm font-bold text-slate-800 uppercase tracking-wide">Aksi Cepat Fasilitator</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        <button onclick="applyPreset('start')" class="px-3 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs font-bold transition">
+          1. Mode Mulai (Hanya Tab 1)
+        </button>
+        <button onclick="applyPreset('mid')" class="px-3 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold transition">
+          2. Buka Tab 1 – Tab 3
+        </button>
+        <button onclick="applyPreset('all')" class="px-3 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-bold transition">
+          3. Buka Semua Modul
+        </button>
+      </div>
+    </div>
+
+    <!-- DAFTAR SAKELAR MODUL -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-800 uppercase tracking-wide">Pengaturan Tampilan Modul Peserta</h2>
+        <span class="text-[11px] text-slate-500">Otomatis tersinkronisasi</span>
+      </div>
+      <div id="module-list" class="divide-y divide-slate-100"></div>
+    </div>
+
+    <!-- PENGUMUMAN LANGSUNG (LIVE BANNER) -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-800 uppercase tracking-wide">Pengumuman Langsung di Layar Peserta</h2>
+        <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold">
+          <input id="banner-toggle" type="checkbox" onchange="saveBanner()" class="w-4 h-4 accent-emerald-600" />
+          <span>Tampilkan Banner</span>
+        </label>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input id="banner-text" type="text" placeholder="Contoh: Waktu praktik kelompok sisa 10 menit..."
+          class="flex-1 border border-slate-300 rounded-xl px-3.5 py-2 text-sm" />
+        <button onclick="saveBanner()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition">
+          Kirim ke Layar Peserta
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const TAB_IDS = ['tab-1', 'tab-2', 'tab-3', 'tab-4', 'tab-5'];
+
+    document.getElementById('pin-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') checkPin();
+    });
+
+    function checkPin() {
+      const val = document.getElementById('pin-input').value.trim();
+      if (val === ADMIN_PIN) {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('admin-dashboard').classList.remove('hidden');
+        loadModules();
+      } else {
+        document.getElementById('pin-error').classList.remove('hidden');
+      }
+    }
+
+    async function loadModules() {
+      const statusEl = document.getElementById('conn-status');
+      if (!sbClient) {
+        statusEl.className = 'text-xs font-semibold px-4 py-2.5 rounded-xl bg-red-50 border border-red-200 text-red-800';
+        statusEl.textContent = 'Supabase belum dikonfigurasi. Periksa URL & Key di file supabase-config.js.';
+        return;
+      }
+
+      const { data, error } = await sbClient.from('modul_config').select('*').order('id');
+      if (error) {
+        statusEl.className = 'text-xs font-semibold px-4 py-2.5 rounded-xl bg-red-50 border border-red-200 text-red-800';
+        statusEl.textContent = 'Gagal terhubung: ' + error.message;
+        return;
+      }
+
+      statusEl.className = 'text-xs font-semibold px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800';
+      statusEl.textContent = '● Terhubung ke Supabase (Real-Time Aktif) — Perubahan langsung tampil di layar peserta.';
+
+      const listEl = document.getElementById('module-list');
+      listEl.innerHTML = '';
+
+      data.forEach(item => {
+        if (item.id === 'banner') {
+          document.getElementById('banner-toggle').checked = item.is_active;
+          document.getElementById('banner-text').value = item.pesan || '';
+          return;
+        }
+        const row = document.createElement('div');
+        row.className = 'py-3.5 flex items-center justify-between gap-4';
+        row.innerHTML = `
+          <div>
+            <p class="text-sm font-bold text-slate-800">${item.label}</p>
+            <p class="text-xs ${item.is_active ? 'text-emerald-600' : 'text-slate-400'} font-semibold">
+              ${item.is_active ? '✓ Terbuka untuk peserta' : '🔒 Terkunci (Menunggu fasilitator)'}
+            </p>
+          </div>
+          <button onclick="toggleModule('${item.id}', ${!item.is_active})"
+            class="px-4 py-2 rounded-xl text-xs font-bold transition ${item.is_active
+              ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+              : 'bg-slate-200 hover:bg-slate-300 text-slate-700'}">
+            ${item.is_active ? 'AKTIF (ON)' : 'TERKUNCI (OFF)'}
+          </button>
+        `;
+        listEl.appendChild(row);
+      });
+    }
+
+    async function toggleModule(id, newState) {
+      await sbClient.from('modul_config').update({ is_active: newState, updated_at: new Date().toISOString() }).eq('id', id);
+      loadModules();
+    }
+
+    async function applyPreset(mode) {
+      const updates = TAB_IDS.map((id, idx) => {
+        let active = true;
+        if (mode === 'start') active = idx === 0;
+        if (mode === 'mid') active = idx <= 2;
+        return sbClient.from('modul_config').update({ is_active: active, updated_at: new Date().toISOString() }).eq('id', id);
+      });
+      await Promise.all(updates);
+      loadModules();
+    }
+
+    async function saveBanner() {
+      const active = document.getElementById('banner-toggle').checked;
+      const pesan = document.getElementById('banner-text').value.trim();
+      await sbClient.from('modul_config').update({ is_active: active, pesan, updated_at: new Date().toISOString() }).eq('id', 'banner');
+      alert(active ? 'Pengumuman berhasil ditampilkan di layar peserta.' : 'Banner pengumuman disembunyikan.');
+    }
+  </script>
+</body>
+</html>
