@@ -426,10 +426,62 @@ function sendBuilderToLibrary() {
 renderPreTest();
 buildCustomPrompt();
 
-// ==================== 13. SINKRONISASI MODUL REAL-TIME (SUPABASE) ====================
-let activeModulesMap = { 'tab-1': true, 'tab-2': true, 'tab-3': true, 'tab-4': true, 'tab-5': true };
+// ==================== 13. HIBRIDA: SUPABASE REAL-TIME + KUNCI PRASYARAT OTOMATIS ====================
+const LOCKED_TABS = ['tab-2', 'tab-3', 'tab-4', 'tab-5'];
+let adminModulesMap = { 'tab-1': true, 'tab-2': true, 'tab-3': true, 'tab-4': true, 'tab-5': true };
 
-function applyModuleVisibility(rows) {
+function isPrasyaratTerpenuhi() {
+  // Bypass khusus fasilitator di proyektor (klik Logo Maluku Utara 3x)
+  if (localStorage.getItem('malut_ai_fasilitator_unlock') === 'true') return true;
+
+  // 1. Cek apakah Pre-Test sudah dikerjakan
+  const preTestDone = localStorage.getItem('malut_ai_pretest') !== null;
+
+  // 2. Cek apakah semua Checklist Keamanan Data (UU PDP) di Tab 1 sudah dicentang
+  const checks = document.querySelectorAll('#tab-1 input[type="checkbox"]');
+  const allChecked = checks.length > 0 && Array.from(checks).every(cb => cb.checked);
+
+  return preTestDone && allChecked;
+}
+
+function renderAllLocks() {
+  const prasyaratOk = isPrasyaratTerpenuhi();
+  const notice = document.getElementById('lock-notice');
+
+  LOCKED_TABS.forEach(tabId => {
+    const btn = document.getElementById('btn-' + tabId);
+    if (!btn) return;
+
+    // Modul terbuka HANYA JIKA dibuka oleh Admin Supabase DAN Prasyarat Tab 1 terpenuhi
+    const isAdminOpen = adminModulesMap[tabId] !== false;
+    const isUnlocked = isAdminOpen && prasyaratOk;
+
+    if (isUnlocked) {
+      btn.disabled = false;
+      btn.classList.remove('opacity-40', 'cursor-not-allowed');
+      btn.textContent = btn.textContent.replace('🔒 ', '');
+    } else {
+      btn.disabled = true;
+      btn.classList.add('opacity-40', 'cursor-not-allowed');
+      if (!btn.textContent.startsWith('🔒 ')) {
+        btn.textContent = '🔒 ' + btn.textContent;
+      }
+    }
+  });
+
+  if (notice) {
+    notice.classList.toggle('hidden', prasyaratOk);
+  }
+
+  // Jika peserta sedang berada di tab yang dikunci, kembalikan ke Tab 1
+  const currentActive = document.querySelector('.tab-content:not(.hidden)');
+  if (currentActive && LOCKED_TABS.includes(currentActive.id)) {
+    const stillOpen = (adminModulesMap[currentActive.id] !== false) && prasyaratOk;
+    if (!stillOpen) switchTab('tab-1');
+  }
+}
+
+function applySupabaseRows(rows) {
   rows.forEach(row => {
     if (row.id === 'banner') {
       const bannerEl = document.getElementById('live-banner');
@@ -444,56 +496,69 @@ function applyModuleVisibility(rows) {
       }
       return;
     }
-
-    activeModulesMap[row.id] = row.is_active;
-    const btn = document.getElementById('btn-' + row.id);
-    if (!btn) return;
-
-    if (row.is_active) {
-      btn.disabled = false;
-      btn.classList.remove('opacity-40', 'cursor-not-allowed');
-      btn.textContent = btn.textContent.replace('🔒 ', '');
-    } else {
-      btn.disabled = true;
-      btn.classList.add('opacity-40', 'cursor-not-allowed');
-      if (!btn.textContent.startsWith('🔒 ')) {
-        btn.textContent = '🔒 ' + btn.textContent;
-      }
-    }
+    adminModulesMap[row.id] = row.is_active;
   });
-
-  // Jika peserta sedang berada di tab yang baru saja dikunci fasilitator, pindahkan ke tab aktif pertama
-  const currentActiveSection = document.querySelector('.tab-content:not(.hidden)');
-  if (currentActiveSection && activeModulesMap[currentActiveSection.id] === false) {
-    const firstOpen = Object.keys(activeModulesMap).find(id => activeModulesMap[id]);
-    if (firstOpen) switchTab(firstOpen);
-  }
+  renderAllLocks();
 }
 
-// Lindungi fungsi goToTab agar tidak bisa melompat ke tab yang sedang dikunci
-const _originalGoToTab = goToTab;
+// Lindungi tombol "Lanjut" agar tidak bisa melompat ke tab yang terkunci
+const _origGoToTab = goToTab;
 goToTab = function(tabId) {
-  if (activeModulesMap[tabId] === false) {
-    alert('Modul ini belum dibuka oleh Fasilitator. Silakan tunggu arahan selanjutnya.');
-    return;
+  if (LOCKED_TABS.includes(tabId)) {
+    if (adminModulesMap[tabId] === false) {
+      alert('Modul ini belum dibuka oleh Fasilitator.');
+      return;
+    }
+    if (!isPrasyaratTerpenuhi()) {
+      alert('Silakan selesaikan Pre-Test dan centang seluruh Checklist Keamanan Data (UU PDP) di Tab 1 terlebih dahulu.');
+      return;
+    }
   }
-  _originalGoToTab(tabId);
+  _origGoToTab(tabId);
 };
 
-async function initRealtimeControl() {
+// Pantau perubahan checklist keamanan data di Tab 1
+document.querySelectorAll('#tab-1 input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', renderAllLocks);
+});
+
+// Perbarui gembok otomatis setelah peserta klik "Simpan Skor Tes Awal"
+const _origEvaluatePreTest = evaluatePreTest;
+evaluatePreTest = function() {
+  _origEvaluatePreTest();
+  renderAllLocks();
+};
+
+// Jalan pintas Fasilitator: Klik Logo Maluku Utara 3x untuk buka semua tab di proyektor
+let logoClickCount = 0;
+const headerLogo = document.querySelector('header img');
+if (headerLogo) {
+  headerLogo.style.cursor = 'pointer';
+  headerLogo.addEventListener('click', () => {
+    logoClickCount++;
+    if (logoClickCount === 3) {
+      localStorage.setItem('malut_ai_fasilitator_unlock', 'true');
+      renderAllLocks();
+      alert('Mode Fasilitator Aktif: Prasyarat dilewati, seluruh modul yang aktif di admin kini terbuka.');
+      logoClickCount = 0;
+    }
+  });
+}
+
+// Inisialisasi Supabase Real-Time + Kunci Prasyarat
+async function initHybridControl() {
+  renderAllLocks();
   if (typeof sbClient === 'undefined' || !sbClient) return;
 
-  // 1. Ambil status modul saat halaman pertama kali dibuka
   const { data, error } = await sbClient.from('modul_config').select('*');
-  if (!error && data) applyModuleVisibility(data);
+  if (!error && data) applySupabaseRows(data);
 
-  // 2. Dengarkan perubahan real-time dari admin.html
   sbClient
-    .channel('modul-config-changes')
+    .channel('modul-config-hybrid')
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'modul_config' }, (payload) => {
-      applyModuleVisibility([payload.new]);
+      applySupabaseRows([payload.new]);
     })
     .subscribe();
 }
 
-initRealtimeControl();
+initHybridControl();
