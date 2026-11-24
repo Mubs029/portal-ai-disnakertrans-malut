@@ -68,8 +68,9 @@ function updateSecurityStatus() {
     : "px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800";
 }
 
-// ==================== 4. MODUL 6 BIDANG ====================
+// ==================== 4. MODUL 6 BIDANG & SEKSI (OPSI A) ====================
 let activeBidangKey = bidangData[0].key;
+let activeSeksiKey = bidangData[0].seksi[0].key;
 
 function renderBidangTabs() {
   document.getElementById('bidang-tabs').innerHTML = bidangData.map(b => `
@@ -82,26 +83,51 @@ function renderBidangTabs() {
 
 function selectBidang(key) {
   activeBidangKey = key;
+  const bidang = bidangData.find(item => item.key === key);
+  activeSeksiKey = bidang.seksi[0].key; // Otomatis pilih seksi pertama saat pindah bidang
   renderBidangTabs();
+}
+
+function selectSeksi(seksiKey) {
+  activeSeksiKey = seksiKey;
+  renderBidangContent();
 }
 
 function renderBidangContent() {
   const b = bidangData.find(item => item.key === activeBidangKey);
+  const s = b.seksi.find(item => item.key === activeSeksiKey) || b.seksi[0];
+
   document.getElementById('bidang-content').innerHTML = `
     <div class="space-y-5">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-navy-50 border border-navy-100 rounded-xl p-4">
-          <p class="text-[11px] font-bold uppercase tracking-wide text-navy-700 mb-1">Fokus Pemanfaatan AI</p>
-          <p class="text-xs sm:text-sm text-slate-700">${b.fokus}</p>
-        </div>
-        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-          <p class="text-[11px] font-bold uppercase tracking-wide text-emerald-800 mb-1">Studi Kasus Maluku Utara</p>
-          <p class="text-xs sm:text-sm text-slate-700">${b.kasus}</p>
+      <!-- SUB-TAB SEKSI -->
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+        <p class="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-2">
+          Pilih Seksi / Subbagian pada ${b.nama}:
+        </p>
+        <div class="flex flex-wrap gap-2">
+          ${b.seksi.map(sec => `
+            <button onclick="selectSeksi('${sec.key}')" class="seksi-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+              sec.key === s.key ? 'active' : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-100'
+            }">${sec.nama}</button>
+          `).join('')}
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        ${b.prompts.map((p, idx) => {
+      <!-- FOKUS & KASUS PER SEKSI -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-navy-50 border border-navy-100 rounded-xl p-4">
+          <p class="text-[11px] font-bold uppercase tracking-wide text-navy-700 mb-1">Fokus Pemanfaatan AI (${s.nama})</p>
+          <p class="text-xs sm:text-sm text-slate-700">${s.fokus}</p>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+          <p class="text-[11px] font-bold uppercase tracking-wide text-emerald-800 mb-1">Studi Kasus Maluku Utara</p>
+          <p class="text-xs sm:text-sm text-slate-700">${s.kasus}</p>
+        </div>
+      </div>
+
+      <!-- DAFTAR PROMPT PER SEKSI -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        ${s.prompts.map((p, idx) => {
           const isDemo = p.mode.includes('Demo');
           const badgeClass = isDemo
             ? 'bg-amber-100 text-amber-900 border-amber-300'
@@ -474,7 +500,7 @@ function renderAllLocks() {
   }
 
   // Jika peserta sedang berada di tab yang dikunci, kembalikan ke Tab 1
-  const currentActive = document.querySelector('.tab-content:not(.hidden)');
+  const currentActive = document.querySelector('.tab-panel:not(.hidden)');
   if (currentActive && LOCKED_TABS.includes(currentActive.id)) {
     const stillOpen = (adminModulesMap[currentActive.id] !== false) && prasyaratOk;
     if (!stillOpen) switchTab('tab-1');

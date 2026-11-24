@@ -8,207 +8,318 @@ const stages = [
   { title: "6. Rencana Aksi", time: "30 mnt" }
 ];
 
-// 2. DATA 6 BIDANG DISNAKERTRANS MALUKU UTARA (DIPERKAYA & BERBASIS ALOKASI WAKTU)
+// 2. DATA 6 BIDANG & SEKSI DISNAKERTRANS MALUKU UTARA (OPSI A: SUB-TAB SEKSI)
 const bidangData = [
   {
     key: "pengawasan",
     nama: "Pengawasan Ketenagakerjaan & K3",
-    fokus: "Daftar periksa pemeriksaan, ringkasan temuan, draf nota pemeriksaan, analisis pola kecelakaan kerja, dan materi sosialisasi K3.",
-    kasus: "Tim Pengawas melakukan pemeriksaan norma kerja dan K3 pada perusahaan subkontraktor kawasan industri pengolahan mineral di Halmahera Tengah/Selatan. Ditemukan ketidaksesuaian penggunaan APD, pencatatan jam lembur, serta 12 laporan insiden kerja ringan-sedang dalam 6 bulan terakhir.",
-    prompts: [
+    seksi: [
       {
-        mode: "Demo Fasilitator",
-        durasi: "5 Menit",
-        judul: "Checklist Pemeriksaan Lapangan & Draf Nota Pemeriksaan Pertama",
-        isi: `Bertindaklah sebagai Pengawas Ketenagakerjaan Ahli di Disnakertrans Provinsi Maluku Utara.
-Konteks: Akan dilakukan pemeriksaan norma kerja dan K3 pada perusahaan subkontraktor kawasan industri (nama disamarkan: Perusahaan X, jumlah pekerja ±250 orang).
+        key: "norma-kerja",
+        nama: "Seksi Norma Kerja",
+        fokus: "Daftar periksa pemeriksaan norma kerja (PKWT, jam kerja, lembur, upah) dan draf nota pemeriksaan.",
+        kasus: "Tim Pengawas memeriksa norma kerja pada perusahaan subkontraktor kawasan industri di Halmahera Tengah/Selatan terkait pencatatan jam lembur dan status PKWT.",
+        prompts: [
+          {
+            mode: "Demo Fasilitator",
+            durasi: "5 Menit",
+            judul: "Checklist Pemeriksaan Norma Kerja & Draf Nota Pemeriksaan I",
+            isi: `Bertindaklah sebagai Pengawas Ketenagakerjaan Ahli di Disnakertrans Provinsi Maluku Utara.
+Konteks: Akan dilakukan pemeriksaan norma kerja pada perusahaan subkontraktor kawasan industri (Perusahaan X, ±250 pekerja).
 Tugas:
-1. Susun daftar periksa (checklist) pemeriksaan lapangan dalam format tabel (Aspek Norma Kerja/K3, Indikator Kepatuhan, Dokumen Bukti, Status).
-2. Buat kerangka draf Nota Pemeriksaan Pertama yang formal, objektif, dan mencantumkan kolom batas waktu perbaikan (maks. 30 hari).
-Catatan: Beri tanda [VERIFIKASI PASAL] pada setiap rujukan regulasi agar saya cek ulang terhadap peraturan terbaru.`
+1. Susun daftar periksa (checklist) norma kerja dalam format tabel (Aspek Norma Kerja, Indikator Kepatuhan, Dokumen Bukti, Status).
+2. Buat kerangka draf Nota Pemeriksaan Pertama yang formal, objektif, dan mencantumkan batas waktu perbaikan (maks. 30 hari).
+Catatan: Beri tanda [VERIFIKASI PASAL] pada setiap rujukan regulasi.`
+          },
+          {
+            mode: "Praktik Kelompok",
+            durasi: "15 Menit",
+            judul: "Analisis Kepatuhan Jam Lembur & Status Kontrak",
+            isi: `Bertindaklah sebagai Pengawas Norma Kerja. Berikut rekap anonim catatan jam kerja dan lembur 20 pekerja shift di Perusahaan X: [TEMPEL DATA ANONIM].
+Tugas:
+1. Identifikasi indikasi pelanggaran batas waktu lembur atau hak istirahat mingguan.
+2. Susun 3 poin rekomendasi perbaikan administrasi kepegawaian untuk perusahaan.`
+          }
+        ]
       },
       {
-        mode: "Praktik Kelompok",
-        durasi: "15 Menit",
-        judul: "Ringkasan Temuan Inspeksi & Analisis Pola Kecelakaan Kerja",
-        isi: `Bertindaklah sebagai Spesialis K3 Pemerintah Daerah. Berikut catatan mentah temuan lapangan dan rekap anonim 12 kejadian kecelakaan kerja selama 6 bulan terakhir: [TEMPEL DATA ANONIM].
+        key: "norma-k3",
+        nama: "Seksi Norma K3",
+        fokus: "Analisis pola kecelakaan kerja, temuan inspeksi K3 lapangan, dan materi sosialisasi (safety briefing).",
+        kasus: "Ditemukan ketidaksesuaian penggunaan APD serta 12 laporan insiden kerja ringan-sedang dalam 6 bulan terakhir di area proyek.",
+        prompts: [
+          {
+            mode: "Praktik Kelompok",
+            durasi: "15 Menit",
+            judul: "Ringkasan Temuan Inspeksi & Analisis Pola Kecelakaan Kerja",
+            isi: `Bertindaklah sebagai Spesialis K3 Pemerintah Daerah. Berikut catatan mentah temuan lapangan dan rekap anonim 12 kejadian kecelakaan kerja selama 6 bulan terakhir: [TEMPEL DATA ANONIM].
 Tugas:
 1. Ringkas temuan menjadi kategori: Temuan Mayor (wajib segera diperbaiki) dan Temuan Minor.
 2. Kelompokkan pola penyebab kecelakaan kerja (faktor manusia, alat/mesin, atau lingkungan kerja).
-3. Susun 3 rekomendasi teknis pencegahan kecelakaan kerja yang realistis untuk manajemen Perusahaan X.`
-      },
-      {
-        mode: "Praktik Kelompok",
-        durasi: "15 Menit",
-        judul: "Materi Sosialisasi K3 (Safety Briefing) Ramah Pekerja",
-        isi: `Bertindaklah sebagai Penyuluh K3 Disnakertrans Maluku Utara.
-Konteks: Berdasarkan temuan rendahnya kepatuhan helm proyek, sepatu safety, dan prosedur kerja di ketinggian pada pekerja subkontraktor.
-Tugas: Susun 1 lembar naskah materi sosialisasi K3 (safety briefing 10 menit) dengan bahasa lugas, persuasif, dan mudah dipahami pekerja lapangan, lengkap dengan 5 poin pengingat utama yang bisa dicetak sebagai poster/infografis.`
+3. Susun 3 rekomendasi teknis pencegahan kecelakaan kerja yang realistis.`
+          },
+          {
+            mode: "Praktik Kelompok",
+            durasi: "15 Menit",
+            judul: "Materi Sosialisasi K3 (Safety Briefing) Ramah Pekerja",
+            isi: `Bertindaklah sebagai Penyuluh K3 Disnakertrans Maluku Utara.
+Konteks: Rendahnya kepatuhan helm proyek, sepatu safety, dan prosedur kerja di ketinggian pada pekerja subkontraktor.
+Tugas: Susun 1 lembar naskah materi sosialisasi K3 (safety briefing 10 menit) dengan bahasa lugas dan persuasif, lengkap dengan 5 poin pengingat untuk poster.`
+          }
+        ]
       }
     ]
   },
   {
     key: "hi",
     nama: "Hubungan Industrial",
-    fokus: "Ringkasan kronologi perselisihan, telaah draf PP/PKB terhadap regulasi, serta bahan dan anjuran mediasi.",
-    kasus: "Mediator Hubungan Industrial menangani perselisihan PHK antara pekerja (Pekerja A) dan perusahaan jasa konstruksi (Perusahaan Y), sekaligus menerima pengajuan pengesahan draf Peraturan Perusahaan (PP) baru.",
-    prompts: [
+    seksi: [
       {
-        mode: "Demo Fasilitator",
-        durasi: "5 Menit",
-        judul: "Ringkasan Kronologi Perselisihan & Daftar Pertanyaan Mediasi",
-        isi: `Bertindaklah sebagai Mediator Hubungan Industrial yang netral di Disnakertrans Provinsi Maluku Utara.
-Konteks: Berikut catatan kronologi perselisihan PHK antara Pekerja A dan Perusahaan Y (seluruh identitas asli disamarkan): [TEMPEL KRONOLOGI].
+        key: "persyaratan-pengupahan",
+        nama: "Seksi Persyaratan Kerja & Pengupahan",
+        fokus: "Telaah awal draf Peraturan Perusahaan (PP) / PKB dan bahan rapat Dewan Pengupahan.",
+        kasus: "Menerima pengajuan pengesahan draf Peraturan Perusahaan (PP) baru dari perusahaan jasa konstruksi di Maluku Utara.",
+        prompts: [
+          {
+            mode: "Praktik Kelompok",
+            durasi: "20 Menit",
+            judul: "Telaah Awal Draf Peraturan Perusahaan (PP) / PKB",
+            isi: `Bertindaklah sebagai Analis Hubungan Industrial. Saya melampirkan kutipan pasal draf Peraturan Perusahaan (anonim) terkait waktu kerja, lembur, cuti, dan sanksi disiplin: [TEMPEL KUTIPAN PASAL].
+Tugas: Lakukan telaah awal terhadap kesesuaiannya dengan prinsip umum regulasi ketenagakerjaan Indonesia. Sajikan dalam tabel: Pasal Draf, Potensi Risiko, dan Saran Perbaikan Redaksi. Tandai [CEK PASAL] untuk verifikasi manual.`
+          }
+        ]
+      },
+      {
+        key: "perselisihan-hi",
+        nama: "Seksi Penyelesaian Perselisihan HI & Jamsostek",
+        fokus: "Ringkasan kronologi perselisihan, daftar pertanyaan mediasi, dan kerangka draf Anjuran Mediasi.",
+        kasus: "Mediator menangani perselisihan PHK antara Pekerja A dan Perusahaan Y yang belum mencapai kesepakatan pada bipartit.",
+        prompts: [
+          {
+            mode: "Demo Fasilitator",
+            durasi: "5 Menit",
+            judul: "Ringkasan Kronologi Perselisihan & Pertanyaan Mediasi",
+            isi: `Bertindaklah sebagai Mediator Hubungan Industrial yang netral di Disnakertrans Provinsi Maluku Utara.
+Konteks: Berikut catatan kronologi perselisihan PHK antara Pekerja A dan Perusahaan Y (identitas disamarkan): [TEMPEL KRONOLOGI].
 Tugas:
-1. Susun ringkasan kronologi secara runtut dalam tabel (Tanggal, Peristiwa, Posisi Pekerja, Posisi Pengusaha).
-2. Identifikasi titik sengketa utama dan buat 5 pertanyaan klarifikasi netral untuk menggali fakta pada sidang mediasi.`
-      },
-      {
-        mode: "Praktik Kelompok",
-        durasi: "20 Menit",
-        judul: "Telaah Awal Draf Peraturan Perusahaan (PP) / PKB",
-        isi: `Bertindaklah sebagai Analis Hubungan Industrial. Saya melampirkan kutipan pasal draf Peraturan Perusahaan (anonim) terkait waktu kerja, lembur, cuti, dan sanksi disiplin: [TEMPEL KUTIPAN PASAL].
-Tugas: Lakukan telaah awal terhadap kesesuaiannya dengan prinsip umum regulasi ketenagakerjaan Indonesia. Sajikan dalam tabel: Pasal Draf, Potensi Ketidaksesuaian/Risiko, dan Saran Perbaikan Redaksi. Tandai [CEK PASAL] untuk verifikasi manual.`
-      },
-      {
-        mode: "Praktik Kelompok",
-        durasi: "15 Menit",
-        judul: "Penyusunan Kerangka Draf Anjuran Mediasi",
-        isi: `Bertindaklah sebagai Mediator Hubungan Industrial. Berdasarkan ringkasan hasil sidang mediasi I dan II (tidak tercapai kesepakatan) berikut: [TEMPEL RINGKASAN SIDANG ANONIM].
-Tugas: Susun kerangka draf Anjuran Mediasi yang formal dan seimbang, mencakup: Duduk Perkara, Pendapat Pekerja, Pendapat Pengusaha, Pertimbangan Mediator, dan Butir Anjuran. Jangan mengarang nomor undang-undang/pasal tanpa tanda [VERIFIKASI].`
+1. Susun ringkasan kronologi dalam tabel (Tanggal, Peristiwa, Posisi Pekerja, Posisi Pengusaha).
+2. Identifikasi titik sengketa utama dan buat 5 pertanyaan klarifikasi netral untuk sidang mediasi.`
+          },
+          {
+            mode: "Praktik Kelompok",
+            durasi: "15 Menit",
+            judul: "Penyusunan Kerangka Draf Anjuran Mediasi",
+            isi: `Bertindaklah sebagai Mediator Hubungan Industrial. Berdasarkan ringkasan hasil sidang mediasi I dan II (tidak tercapai kesepakatan) berikut: [TEMPEL RINGKASAN SIDANG ANONIM].
+Tugas: Susun kerangka draf Anjuran Mediasi yang formal dan seimbang: Duduk Perkara, Pendapat Pekerja, Pendapat Pengusaha, Pertimbangan Mediator, dan Butir Anjuran. Jangan mengarang nomor pasal tanpa tanda [VERIFIKASI].`
+          }
+        ]
       }
     ]
   },
   {
     key: "pelatihan",
     nama: "Pelatihan & Produktivitas (UPTD/BLK)",
-    fokus: "Kurikulum dan modul pelatihan sesuai kebutuhan industri, soal uji kompetensi, dan materi promosi pelatihan.",
-    kasus: "UPTD BLK Provinsi Maluku Utara menyiapkan program Pelatihan Berbasis Kompetensi (PBK) kejuruan Pengelasan (Welding SMAW 3G) dan Instalasi Listrik Industri agar lulusan lokal terserap di kawasan industri.",
-    prompts: [
+    seksi: [
       {
-        mode: "Demo Fasilitator",
-        durasi: "5 Menit",
-        judul: "Kerangka Kurikulum Pelatihan Berbasis Kompetensi (PBK)",
-        isi: `Bertindaklah sebagai Instruktur Senior UPTD BLK Provinsi Maluku Utara.
-Konteks: Merancang pelatihan 20 hari (160 JP) kejuruan [SEBUTKAN KEJURUAN, mis. Pengelasan SMAW 3G / Operator Alat Berat] agar lulusan siap kerja di industri Maluku Utara.
-Tugas: Susun struktur kurikulum dalam tabel (Unit Kompetensi, Materi Pokok, Jam Teori, Jam Praktik, Indikator Kelulusan) serta kerangka ringkas modul pertemuan pertama.`
+        key: "kelembagaan-kurikulum",
+        nama: "Seksi Pelatihan & Kelembagaan (PBK)",
+        fokus: "Penyusunan kerangka kurikulum PBK sesuai kebutuhan industri dan materi promosi pelatihan vokasi.",
+        kasus: "UPTD BLK Provinsi Maluku Utara menyiapkan program PBK kejuruan Pengelasan (Welding SMAW 3G) dan Instalasi Listrik Industri.",
+        prompts: [
+          {
+            mode: "Demo Fasilitator",
+            durasi: "5 Menit",
+            judul: "Kerangka Kurikulum Pelatihan Berbasis Kompetensi (PBK)",
+            isi: `Bertindaklah sebagai Instruktur Senior UPTD BLK Provinsi Maluku Utara.
+Konteks: Merancang pelatihan 20 hari (160 JP) kejuruan [SEBUTKAN KEJURUAN, mis. Pengelasan SMAW 3G] agar lulusan siap kerja di industri Maluku Utara.
+Tugas: Susun struktur kurikulum dalam tabel (Unit Kompetensi, Materi Pokok, Jam Teori, Jam Praktik, Indikator Kelulusan) serta kerangka modul pertemuan pertama.`
+          },
+          {
+            mode: "Praktik Kelompok",
+            durasi: "15 Menit",
+            judul: "Materi Promosi Pelatihan Vokasi (Medsos & WA)",
+            isi: `Bertindaklah sebagai Humas UPTD BLK Disnakertrans Maluku Utara.
+Konteks: Pembukaan pendaftaran pelatihan gratis bersertifikat BNSP untuk pemuda lokal (kuota 32 orang, pendaftaran tanggal [TANGGAL]).
+Tugas: Buat 2 versi naskah promosi: (1) Caption Instagram/Facebook resmi dinas, dan (2) Pesan broadcast singkat grup WhatsApp kelurahan/desa.`
+          }
+        ]
       },
       {
-        mode: "Praktik Kelompok",
-        durasi: "20 Menit",
-        judul: "Penyusunan Bank Soal Uji Kompetensi & Rubrik Praktik",
-        isi: `Bertindaklah sebagai Asesor dan Penyusun Materi Uji Kompetensi UPTD BLK.
+        key: "sertifikasi-produktivitas",
+        nama: "Seksi Sertifikasi & Produktivitas",
+        fokus: "Bank soal uji kompetensi, rubrik praktik bengkel, dan evaluasi penyerapan alumni pelatihan.",
+        kasus: "Asesor menyusun perangkat uji kompetensi dan rubrik penilaian praktik untuk kelulusan peserta batch terbaru.",
+        prompts: [
+          {
+            mode: "Praktik Kelompok",
+            durasi: "20 Menit",
+            judul: "Penyusunan Bank Soal Uji Kompetensi & Rubrik Praktik",
+            isi: `Bertindaklah sebagai Asesor dan Penyusun Materi Uji Kompetensi UPTD BLK.
 Tugas:
 1. Buat 10 soal pilihan ganda berbasis studi kasus lapangan untuk kejuruan [NAMA KEJURUAN] (mencakup K3 bengkel dan teknis dasar) lengkap dengan kunci jawaban.
-2. Buat rubrik penilaian uji praktik dalam bentuk tabel (Aspek Penilaian, Bobot %, Kriteria Kompeten, Kriteria Belum Kompeten).`
-      },
-      {
-        mode: "Praktik Kelompok",
-        durasi: "15 Menit",
-        judul: "Materi Promosi Pelatihan Vokasi untuk Media Sosial & Pengumuman",
-        isi: `Bertindaklah sebagai Humas UPTD BLK Disnakertrans Maluku Utara.
-Konteks: Pembukaan pendaftaran pelatihan gratis bersertifikat BNSP untuk pemuda lokal Maluku Utara (kuota 32 orang, pendaftaran tanggal [TANGGAL]).
-Tugas: Buat 2 versi naskah promosi: (1) Caption informatif dan menarik untuk Instagram/Facebook resmi dinas, dan (2) Pesan broadcast singkat untuk grup WhatsApp kelurahan/desa.`
+2. Buat rubrik penilaian uji praktik dalam tabel (Aspek Penilaian, Bobot %, Kriteria Kompeten, Belum Kompeten).`
+          }
+        ]
       }
     ]
   },
   {
     key: "penempatan",
     nama: "Penempatan & Perluasan Kesempatan Kerja",
-    fokus: "Analisis data lowongan dan pencari kerja, pencocokan keterampilan, konten informasi pasar kerja, serta dukungan analisis penggunaan TKA.",
-    kasus: "Pengantar Kerja mengevaluasi tingginya angka pencari kerja lulusan SMA/SMK lokal di Ternate, Tidore, dan Halmahera yang belum terserap di lowongan teknis industri, sekaligus menelaah laporan rasio TKA dan TKI pendamping.",
-    prompts: [
+    seksi: [
       {
-        mode: "Demo Fasilitator",
-        durasi: "5 Menit",
-        judul: "Analisis Kesenjangan Keterampilan (Skill Mismatch) & Pencocokan",
-        isi: `Bertindaklah sebagai Pengantar Kerja Ahli di Disnakertrans Provinsi Maluku Utara.
-Konteks: Berikut rekap anonim data pencari kerja (pendidikan & keahlian) dibandingkan dengan rekap lowongan perusahaan semester ini: [TEMPEL DATA ANONIM].
+        key: "ipk-penempatan",
+        nama: "Seksi Informasi Pasar Kerja & Penempatan",
+        fokus: "Analisis skill mismatch pencari kerja vs lowongan serta produksi buletin IPK bulanan.",
+        kasus: "Pengantar Kerja mengevaluasi lulusan SMA/SMK lokal di Ternate, Tidore, dan Halmahera yang belum terserap di lowongan teknis industri.",
+        prompts: [
+          {
+            mode: "Demo Fasilitator",
+            durasi: "5 Menit",
+            judul: "Analisis Kesenjangan Keterampilan (Skill Mismatch)",
+            isi: `Bertindaklah sebagai Pengantar Kerja Ahli di Disnakertrans Provinsi Maluku Utara.
+Konteks: Berikut rekap anonim data pencari kerja dibandingkan lowongan perusahaan semester ini: [TEMPEL DATA ANONIM].
 Tugas:
-1. Identifikasi 3 kesenjangan keterampilan (skill mismatch) terbesar.
-2. Buat matriks pencocokan (matching) antara profil pencari kerja yang ada dengan jenis pelatihan singkat yang direkomendasikan agar siap ditempatkan.`
+1. Identifikasi 3 kesenjangan keterampilan terbesar.
+2. Buat matriks pencocokan (matching) antara profil pencari kerja dengan jenis pelatihan singkat yang direkomendasikan.`
+          },
+          {
+            mode: "Praktik Kelompok",
+            durasi: "15 Menit",
+            judul: "Konten Buletin Informasi Pasar Kerja (IPK) Bulanan",
+            isi: `Bertindaklah sebagai Pengelola IPK Disnakertrans Maluku Utara.
+Konteks: Rekap bulan ini mencatat 450 pencari kerja terdaftar, 280 lowongan aktif (konstruksi, mekanik, administrasi), dan 195 penempatan.
+Tugas: Susun naskah ringkas Buletin IPK (maks. 300 kata) yang komunikatif dilengkapi tips persiapan melamar kerja.`
+          }
+        ]
       },
       {
-        mode: "Praktik Kelompok",
-        durasi: "20 Menit",
-        judul: "Dukungan Analisis Laporan Penggunaan TKA & Alih Teknologi",
-        isi: `Bertindaklah sebagai Analis Kebijakan Penempatan Tenaga Kerja. Berikut tabel anonim jumlah TKA berdasarkan jabatan, sektor, dan jumlah Tenaga Kerja Pendamping (TKI) di Maluku Utara: [TEMPEL DATA ANONIM].
+        key: "perluasan-tka",
+        nama: "Seksi Perluasan Kesempatan Kerja & TKA",
+        fokus: "Analisis rasio TKA dan TKI pendamping (alih teknologi) serta evaluasi program Tenaga Kerja Mandiri (TKM).",
+        kasus: "Menelaah laporan rasio TKA terhadap TKI pendamping pada perusahaan pengolahan mineral dan konstruksi di Halmahera.",
+        prompts: [
+          {
+            mode: "Praktik Kelompok",
+            durasi: "20 Menit",
+            judul: "Analisis Laporan Penggunaan TKA & Alih Teknologi",
+            isi: `Bertindaklah sebagai Analis Kebijakan Penempatan Tenaga Kerja. Berikut tabel anonim jumlah TKA berdasarkan jabatan, sektor, dan jumlah TKI Pendamping di Maluku Utara: [TEMPEL DATA ANONIM].
 Tugas:
-1. Analisis rasio TKA terhadap TKI pendamping per sektor dan tandai perusahaan dengan rasio pendampingan rendah.
-2. Susun 4 poin bahan evaluasi untuk rapat koordinasi pengawasan alih teknologi dan alih keahlian.`
-      },
-      {
-        mode: "Praktik Kelompok",
-        durasi: "15 Menit",
-        judul: "Konten Buletin Informasi Pasar Kerja (IPK) Bulanan",
-        isi: `Bertindaklah sebagai Pengelola Informasi Pasar Kerja (IPK) Disnakertrans Maluku Utara.
-Konteks: Rekap bulan ini mencatat 450 pencari kerja terdaftar, 280 lowongan aktif (dominan sektor konstruksi, mekanik, dan administrasi), dan 195 penempatan.
-Tugas: Susun naskah ringkas Buletin IPK (maks. 300 kata) yang komunikatif untuk pencari kerja dan pemangku kepentingan, dilengkapi tips persiapan melamar kerja.`
+1. Analisis rasio TKA terhadap TKI pendamping per sektor dan tandai perusahaan dengan rasio rendah.
+2. Susun 4 poin bahan evaluasi untuk rapat koordinasi pengawasan alih teknologi.`
+          }
+        ]
       }
     ]
   },
   {
     key: "transmigrasi",
     nama: "Transmigrasi",
-    fokus: "Ringkasan kajian kawasan, profil potensi kawasan transmigrasi, serta bahan perencanaan dan koordinasi lintas OPD.",
-    kasus: "Bidang Transmigrasi menyiapkan profil potensi ekonomi (pala, kelapa, hortikultura, perikanan) dan peta kebutuhan infrastruktur dasar kawasan transmigrasi di Pulau Halmahera untuk rapat koordinasi pembangunan kawasan.",
-    prompts: [
+    seksi: [
       {
-        mode: "Demo Fasilitator",
-        durasi: "5 Menit",
-        judul: "Ringkasan Kajian & Profil Potensi Kawasan Transmigrasi",
-        isi: `Bertindaklah sebagai Perencana Pembangunan Kawasan Transmigrasi di Disnakertrans Provinsi Maluku Utara.
+        key: "perencanaan-kawasan",
+        nama: "Seksi Perencanaan & Pembangunan Kawasan",
+        fokus: "Ringkasan kajian kelayakan lahan, profil potensi kawasan transmigrasi, dan matriks koordinasi infrastruktur lintas OPD.",
+        kasus: "Menyiapkan profil potensi ekonomi (pala, kelapa, hortikultura, perikanan) dan peta kebutuhan infrastruktur dasar Satuan Permukiman (SP) di Pulau Halmahera.",
+        prompts: [
+          {
+            mode: "Demo Fasilitator",
+            durasi: "5 Menit",
+            judul: "Ringkasan Kajian & Profil Potensi Kawasan Transmigrasi",
+            isi: `Bertindaklah sebagai Perencana Pembangunan Kawasan Transmigrasi di Disnakertrans Provinsi Maluku Utara.
 Konteks: Berikut catatan hasil survei lapangan kawasan transmigrasi [NAMA KAWASAN / KABUPATEN]: [TEMPEL CATATAN SURVEI].
 Tugas: Susun Profil Potensi Kawasan secara ringkas dengan struktur: (1) Gambaran Umum, (2) Potensi Komoditas Unggulan, (3) Kondisi Infrastruktur Dasar, (4) Peluang Kemitraan Usaha, dan (5) Kebutuhan Intervensi.`
-      },
-      {
-        mode: "Praktik Kelompok",
-        durasi: "20 Menit",
-        judul: "Bahan Rapat Koordinasi Lintas OPD & Matriks Pembagian Peran",
-        isi: `Bertindaklah sebagai Koordinator Perencanaan Transmigrasi. Dari ringkasan kendala akses jalan tani, ketersediaan air bersih, dan pemasaran hasil panen warga transmigran berikut: [TEMPEL RINGKASAN].
+          },
+          {
+            mode: "Praktik Kelompok",
+            durasi: "20 Menit",
+            judul: "Bahan Rapat Koordinasi Lintas OPD & Pembagian Peran",
+            isi: `Bertindaklah sebagai Koordinator Perencanaan Transmigrasi. Dari ringkasan kendala akses jalan tani, air bersih, dan pemasaran hasil panen warga berikut: [TEMPEL RINGKASAN].
 Tugas:
-1. Susun kerangka paparan pimpinan (maks. 6 slide, masing-masing 3–4 poin kunci).
+1. Susun kerangka paparan pimpinan (maks. 6 slide, 3–4 poin kunci per slide).
 2. Buat matriks pembagian peran koordinasi antar-OPD (PUPR, Pertanian, Perdagangan, Disnakertrans) dalam format tabel.`
+          }
+        ]
       },
       {
-        mode: "Praktik Kelompok",
-        durasi: "15 Menit",
-        judul: "Ringkasan Eksekutif Laporan Progres Pembangunan Kawasan",
-        isi: `Bertindaklah sebagai Penyusun Laporan Teknis Transmigrasi. Berikut data progres fisik dan penyerapan anggaran pembangunan sarana prasarana kawasan transmigrasi triwulan berjalan: [TEMPEL DATA ANONIM].
-Tugas: Susun Ringkasan Eksekutif 1 halaman untuk Kepala Dinas yang menyoroti capaian utama, hambatan cuaca/logistik kepulauan, dan langkah percepatan triwulan berikutnya.`
+        key: "penempatan-transmigran",
+        nama: "Seksi Penyiapan & Penempatan Transmigran",
+        fokus: "Pencocokan profil keahlian calon transmigran (TPA/TPS) dengan komoditas wilayah tujuan dan draf administrasi penempatan.",
+        kasus: "Menyeleksi dan memetakan calon transmigran agar keahlian bertani/melaut sesuai dengan karakteristik lahan di lokasi SP tujuan.",
+        prompts: [
+          {
+            mode: "Praktik Kelompok",
+            durasi: "15 Menit",
+            judul: "Pencocokan Profil Keahlian Calon Transmigran (Anonim)",
+            isi: `Bertindaklah sebagai Analis Penempatan Transmigran Disnakertrans Maluku Utara.
+Konteks: Berikut data agregat anonim calon transmigran (usia, keahlian utama, pengalaman bertani/nelayan, tanpa NIK): [TEMPEL DATA ANONIM].
+Tugas: Rekomendasikan pembagian penempatan ke SP berbasis pertanian pangan vs perkebunan/perikanan dalam bentuk tabel, serta usulkan 3 topik pelatihan pra-penempatan.`
+          }
+        ]
+      },
+      {
+        key: "ekonomi-pertanahan",
+        nama: "Seksi Pengembangan Ekonomi, Pertanahan & Sosbud",
+        fokus: "Klasifikasi aduan pertanahan (HPL/SHM), evaluasi kemandirian SP, dan ringkasan eksekutif progres pembangunan kawasan.",
+        kasus: "Mengkompilasi laporan progres fisik, status sertifikasi lahan, dan rekap aduan warga kawasan transmigrasi untuk laporan triwulanan Kepala Dinas.",
+        prompts: [
+          {
+            mode: "Praktik Kelompok",
+            durasi: "15 Menit",
+            judul: "Ringkasan Eksekutif Progres Kawasan & Klasifikasi Aduan",
+            isi: `Bertindaklah sebagai Penyusun Laporan Teknis Transmigrasi. Berikut data progres fisik, status lahan, dan rekap aduan warga kawasan transmigrasi triwulan berjalan: [TEMPEL DATA ANONIM].
+Tugas:
+1. Klasifikasikan aduan warga (Pertanahan/SHM, Infrastruktur, Ekonomi, Sosial) beserta tingkat urgensinya.
+2. Susun Ringkasan Eksekutif 1 halaman untuk Kepala Dinas menyoroti capaian, hambatan logistik kepulauan, dan langkah percepatan.`
+          }
+        ]
       }
     ]
   },
   {
     key: "sekretariat",
     nama: "Sekretariat",
-    fokus: "Bahan perencanaan, administrasi kepegawaian, pelaporan keuangan, dan dukungan tata naskah dinas.",
-    kasus: "Tim Sekretariat menyusun bahan perencanaan program lintas bidang, evaluasi serapan anggaran triwulanan, serta administrasi pengembangan kompetensi dan kepegawaian ASN.",
-    prompts: [
+    seksi: [
       {
-        mode: "Demo Fasilitator",
-        durasi: "5 Menit",
-        judul: "Draf Telaahan Staf & Nota Dinas Perencanaan Kegiatan",
-        isi: `Bertindaklah sebagai Kasubbag Umum dan Kepegawaian di Sekretariat Disnakertrans Provinsi Maluku Utara.
-Konteks: Akan diusulkan kegiatan [NAMA KEGIATAN] dengan latar belakang [JELASKAN SINGKAT] dan pagu indikatif [NOMINAL].
-Tugas: Susun draf Telaahan Staf sesuai tata naskah dinas pemerintahan (Persoalan, Praanggapan, Fakta yang Mempengaruhi, Analisis, Kesimpulan, dan Saran Tindak Lanjut).`
-      },
-      {
-        mode: "Praktik Kelompok",
-        durasi: "20 Menit",
-        judul: "Ringkasan Evaluasi Serapan Keuangan & Rencana Tindak Lanjut",
-        isi: `Bertindaklah sebagai Analis Keuangan dan Perencanaan OPD. Berikut catatan rapat evaluasi realisasi anggaran per bidang triwulan berjalan (tanpa nomor rekening/identitas pribadi): [TEMPEL CATATAN].
+        key: "perencanaan-keuangan",
+        nama: "Subbagian Perencanaan & Keuangan",
+        fokus: "Evaluasi serapan anggaran triwulanan, notulensi rapat evaluasi, dan rencana tindak lanjut lintas bidang.",
+        kasus: "Menyusun bahan evaluasi serapan anggaran triwulanan dan tindak lanjut percepatan realisasi kegiatan.",
+        prompts: [
+          {
+            mode: "Praktik Kelompok",
+            durasi: "20 Menit",
+            judul: "Ringkasan Evaluasi Serapan Keuangan & Rencana Tindak Lanjut",
+            isi: `Bertindaklah sebagai Analis Keuangan dan Perencanaan OPD. Berikut catatan rapat evaluasi realisasi anggaran per bidang triwulan berjalan (tanpa nomor rekening/identitas pribadi): [TEMPEL CATATAN].
 Tugas:
-1. Susun Notulen Rapat yang terstruktur (Agenda, Capaian Serapan, Kendala Administrasi/Teknis, Keputusan).
-2. Buat tabel Rencana Tindak Lanjut (Kegiatan, Bidang Penanggung Jawab, Target Waktu, Indikator Penyelesaian).`
+1. Susun Notulen Rapat terstruktur (Agenda, Capaian Serapan, Kendala, Keputusan).
+2. Buat tabel Rencana Tindak Lanjut (Kegiatan, Bidang Penanggung Jawab, Target Waktu, Indikator).`
+          }
+        ]
       },
       {
-        mode: "Praktik Kelompok",
-        durasi: "15 Menit",
-        judul: "Kerangka Matriks Kebutuhan Pengembangan Kompetensi ASN",
-        isi: `Bertindaklah sebagai Analis SDM Aparatur di Sekretariat Disnakertrans Maluku Utara.
-Konteks: Rekap anonim komposisi jabatan fungsional (Pengawas, Mediator, Instruktur, Pengantar Kerja) dan pelaksana yang membutuhkan peningkatan kompetensi digital/AI.
-Tugas: Susun matriks usulan program pengembangan kompetensi (Jabatan, Kesenjangan Kompetensi, Bentuk Pelatihan, Estimasi Waktu, Output yang Diharapkan) untuk bahan perencanaan tahun berikutnya.`
+        key: "umum-kepegawaian",
+        nama: "Subbagian Umum & Kepegawaian",
+        fokus: "Tata naskah dinas (telaahan staf/nota dinas) dan matriks kebutuhan pengembangan kompetensi ASN.",
+        kasus: "Menyusun draf telaahan staf usulan kegiatan serta pemetaan kebutuhan pelatihan digital/AI bagi jabatan fungsional.",
+        prompts: [
+          {
+            mode: "Demo Fasilitator",
+            durasi: "5 Menit",
+            judul: "Draf Telaahan Staf & Nota Dinas Perencanaan Kegiatan",
+            isi: `Bertindaklah sebagai Kasubbag Umum dan Kepegawaian di Sekretariat Disnakertrans Provinsi Maluku Utara.
+Konteks: Akan diusulkan kegiatan [NAMA KEGIATAN] dengan latar belakang [JELASKAN SINGKAT] dan pagu indikatif [NOMINAL].
+Tugas: Susun draf Telaahan Staf sesuai tata naskah dinas pemerintahan (Persoalan, Praanggapan, Fakta yang Mempengaruhi, Analisis, Kesimpulan, dan Saran).`
+          },
+          {
+            mode: "Praktik Kelompok",
+            durasi: "15 Menit",
+            judul: "Matriks Kebutuhan Pengembangan Kompetensi ASN",
+            isi: `Bertindaklah sebagai Analis SDM Aparatur di Sekretariat Disnakertrans Maluku Utara.
+Konteks: Rekap anonim komposisi jabatan fungsional (Pengawas, Mediator, Instruktur, Pengantar Kerja) yang membutuhkan peningkatan kompetensi AI.
+Tugas: Susun matriks usulan program pengembangan kompetensi (Jabatan, Kesenjangan Kompetensi, Bentuk Pelatihan, Estimasi Waktu, Output).`
+          }
+        ]
       }
     ]
   }
@@ -251,6 +362,15 @@ const datasets = {
       ["Batch 1", "Instalasi Listrik Industri", "24", "22", "19"],
       ["Batch 2", "Administrasi Perkantoran", "30", "28", "17"],
       ["Batch 2", "Teknisi AC & Pendingin", "20", "18", "15"]
+    ]
+  },
+  transmigrasi: {
+    headers: ["Kode_SP", "Kabupaten", "Jumlah_KK", "Komoditas_Unggulan", "Status_Lahan_SHM", "Kendala_Utama"],
+    rows: [
+      ["SP-01 (Anonim)", "Halmahera Timur", "150", "Padi & Hortikultura", "85% Terbit", "Akses jalan tani rusak"],
+      ["SP-02 (Anonim)", "Halmahera Selatan", "120", "Pala & Kelapa", "60% Terbit", "Tumpang tindih batas lahan"],
+      ["SP-03 (Anonim)", "Halmahera Utara", "95", "Perikanan & Jagung", "92% Terbit", "Pemasaran hasil panen"],
+      ["SP-04 (Anonim)", "Pulau Morotai", "80", "Kelapa & Perikanan", "70% Terbit", "Ketersediaan air bersih"]
     ]
   }
 };

@@ -14,6 +14,12 @@ body {
   border-color: #059669;
 }
 
+.seksi-btn.active {
+  background-color: #102a43;
+  color: #ffffff;
+  border-color: #102a43;
+}
+
 @media print {
   body * {
     visibility: hidden;
